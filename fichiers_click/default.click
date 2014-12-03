@@ -57,6 +57,6 @@ FromDevice(eth1)
 	-> ToDevice(eth0);
 
 failResolvQueue :: Queue(XXX);
-resolv[1] -> tee :: Tee -> failResolvQueue;
+resolv[1] -> Unqueue() -> tee :: Tee -> failResolvQueue;
 tee[1] -> Queue(1) -> RequestEIDMapping;
-failResolvQueue -> [1]resolv;
+failResolvQueue -> resolv;
