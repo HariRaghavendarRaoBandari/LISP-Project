@@ -31,10 +31,9 @@ class LISPGenMapRegisterOuter : public Element {
 
 		const char *class_name() const { return "LISPGenMapRegisterOuter"; }
 		const char *port_count() const { return "0/1"; }
-		const char *processing() const { return AGNOSTIC; }
+		const char *processing() const { return PULL; }
 		int configure(Vector<String>&, ErrorHandler*) const { return 0; }
 
-		void push(int, Packet *);
 		Packet *pull(int);
 };
 
