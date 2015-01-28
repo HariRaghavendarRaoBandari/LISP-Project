@@ -2,28 +2,27 @@
 #include <click/confparse.hh>
 #include <click/error.hh>
 #include <click/packet.hh>
+#include <clicknet/ip.h>
+#include <clicknet/udp.h>
+#include <clicknet/ether.h>
 #include "LISPGenMapRegisterOuter.hh"
-#include "LISPMapRegisterOuterHeader.h"
+#include "LISPStructs.hh"
 
 CLICK_DECLS
-
-static const uint32_t headroom = sizeof(click_ip) + sizeof(click_udp) + sizeof(click_ether);
 
 LISPGenMapRegisterOuter::LISPGenMapRegisterOuter() { }
 
 LISPGenMapRegisterOuter::~LISPGenMapRegisterOuter() { }
 
 Packet* LISPGenMapRegisterOuter::pull(int) {
-	click_chatter("TODO: test");
-
 	struct LISPMapRegisterOuterHeader data;
-	data.Type = LISP_H_TYPE_3;
+	data.Type.value = LISP_H_TYPE_3;
 	data.P = false;
-	memset(data.M, 0, sizeof(data.Reserved));
+	data.Reserved.value = 0;
 	data.M = false;
 	data.Record_Count = (uint8_t) 1;
 
-	WritablePacket *p = Packet::make(headroom, data, 20 * 8, 0);
+	WritablePacket *p = Packet::make(headroom, &data, 20 * 8, 0); // 20 est à modifier en fonction d'"Authentication Data"
 
 	if (p == NULL) {
 		click_chatter("[-] Packet creation failed!");

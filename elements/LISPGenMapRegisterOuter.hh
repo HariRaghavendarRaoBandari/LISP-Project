@@ -25,6 +25,8 @@ The "M" field/bit is fixed to 0.
 https://tools.ietf.org/html/rfc6830#page-38
  */
 class LISPGenMapRegisterOuter : public Element {
+	static const uint32_t headroom = sizeof(click_ip) + sizeof(click_udp) + sizeof(click_ether);
+
 	public:
 		LISPGenMapRegisterOuter() CLICK_COLD;
 		~LISPGenMapRegisterOuter() CLICK_COLD;
@@ -32,7 +34,7 @@ class LISPGenMapRegisterOuter : public Element {
 		const char *class_name() const { return "LISPGenMapRegisterOuter"; }
 		const char *port_count() const { return "0/1"; }
 		const char *processing() const { return PULL; }
-		int configure(Vector<String>&, ErrorHandler*) const { return 0; }
+		int configure(Vector<String>&, ErrorHandler*) { return 0; }
 
 		Packet *pull(int);
 };
