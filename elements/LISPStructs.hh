@@ -2,12 +2,7 @@
 #define LISPSTRUCTS_H
 
 /*
- * Let's use bit-fields for specific lenght data:
- * http://www.tutorialspoint.com/cprogramming/c_bit_fields.htm
- */
-
-/*
- * Values for Type field.
+ * Values for the Type field.
  */
 #define LISP_H_TYPE_0 0	// Reserved
 #define LISP_H_TYPE_1 1	// Map-Request
@@ -23,11 +18,11 @@
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 struct LISPMapRegisterOuterHeader {
-	struct { unsigned value : 4; } Type;
+	unsigned short Type : 4; // 4 bits
 	bool P;
-	struct { unsigned value : 18; } Reserved;
+	unsigned int Reserved; // 18 bits but we use a mask here
 	bool M;
-	uint8_t Record_Count;
+	unsigned int Record_Count; // 8 bits but we use a mask here
 };
 
 #endif

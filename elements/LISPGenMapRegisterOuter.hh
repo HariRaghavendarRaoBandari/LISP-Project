@@ -2,6 +2,9 @@
 #define CLICK_LISPGENMAPREGISTEROUTER_HH
 
 #include <click/element.hh>
+#include <clicknet/udp.h>
+#include <clicknet/ether.h>
+
 CLICK_DECLS
 
 /*
@@ -15,17 +18,19 @@ Generates the outer common bytes of a MapRegister request.
 
 =d
 
-The outer common bytes for a MapRegister request correspond to the first 4 bytes
-of the packet.
+The outer common bytes for a MapRegister request correspond to the first 4
+bytes of the packet.
 
 The "record count" filed is fixed to 1.
-The "M" field/bit is fixed to 0.
+The "M" bit is fixed to 0.
+The "P" bit is fixed to 0.
 
 =a
 https://tools.ietf.org/html/rfc6830#page-38
  */
 class LISPGenMapRegisterOuter : public Element {
-	static const uint32_t headroom = sizeof(click_ip) + sizeof(click_udp) + sizeof(click_ether);
+	static const uint32_t headroom = sizeof(click_ip) + sizeof(click_udp) +
+		sizeof(click_ether);
 
 	public:
 		LISPGenMapRegisterOuter() CLICK_COLD;
