@@ -2,27 +2,25 @@
 #define LISPSTRUCTS_H
 
 /*
- * Values for the Type field.
+ * Values for the Key_ID field.
  */
-#define LISP_H_TYPE_0 0	// Reserved
-#define LISP_H_TYPE_1 1	// Map-Request
-#define LISP_H_TYPE_2 2	// Map-Reply
-#define LISP_H_TYPE_3 3	// Map-Register
-#define LISP_H_TYPE_4 4	// Map-Notify
-#define LISP_H_TYPE_8 8	// Encapsulated Control Message
+
+#define KEY_ID_NONE 			0x00000000
+#define KEY_ID_HMAC_SHA_1_96 	0x00000100 // (00 01 00 00 => 00000100) defined in [RFC2404]
+#define KEY_ID_HMAC_SHA_256_128 0x00000200 // (00 02 00 00 => 00000200) defined in [RFC4868]
 
 /*
- *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
- * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- * |Type=3 |P|            Reserved               |M| Record Count  |
- * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *		 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ *      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *      |            Key ID             |  Authentication Data Length   |
+ *      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *      ~                     Authentication Data                       ~
+ *  	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
-struct LISPMapRegisterOuterHeader {
-	unsigned short Type : 4; // 4 bits
-	bool P;
-	unsigned int Reserved; // 18 bits but we use a mask here
-	bool M;
-	unsigned int Record_Count; // 8 bits but we use a mask here
+struct LISPMapRegisterInnerHeader {
+	unsigned int Key_Id ; //  16 bits but we use a mask here
+	unsigned int Authentication_Data_Length; // number of bytes for Authentication_Data field -- 16 bits but we use a mask here 
+	unsigned int Authentication_Data;  // uncomment and modify if needed
 };
 
 #endif
