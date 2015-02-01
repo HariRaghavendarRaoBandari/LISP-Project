@@ -4,9 +4,9 @@
 
 CLICK_DECLS
 
-LISPGenMapRegisterOuter::LISPGenMapRegisterInner() { }
+LISPGenMapRegisterInner::LISPGenMapRegisterInner() { }
 
-LISPGenMapRegisterOuter::~LISPGenMapRegisterInner() { }
+LISPGenMapRegisterInner::~LISPGenMapRegisterInner() { }
 
 Packet* LISPGenMapRegisterInner::pull(int) {
 
@@ -38,4 +38,4 @@ Packet* LISPGenMapRegisterInner::pull(int) {
 }
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(LISPGenMapRegisterOuter)
+EXPORT_ELEMENT(LISPGenMapRegisterInner)
