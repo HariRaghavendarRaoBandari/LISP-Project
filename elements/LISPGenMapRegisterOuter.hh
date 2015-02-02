@@ -21,9 +21,10 @@ Generates the outer common bytes of a MapRegister request.
 The outer common bytes for a MapRegister request correspond to the first 4
 bytes of the packet.
 
-The "record count" filed is fixed to 1.
-The "M" bit is fixed to 0.
 The "P" bit is fixed to 0.
+The "Reserved" field is fixed to 0.
+The "M" bit is fixed to 0.
+The "record count" field is fixed to 1.
 
 =a
 https://tools.ietf.org/html/rfc6830#page-38

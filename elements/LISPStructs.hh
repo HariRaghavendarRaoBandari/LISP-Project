@@ -17,12 +17,22 @@
  * |Type=3 |P|            Reserved               |M| Record Count  |
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
+
 struct LISPMapRegisterOuterHeader {
-	unsigned short Type : 4; // 4 bits
-	bool P;
-	unsigned int Reserved; // 18 bits but we use a mask here
-	bool M;
-	unsigned int Record_Count; // 8 bits but we use a mask here
-};
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	/*
+	 * The Reserved field is splitted to align the fields on 8bits.
+	 */
+	unsigned int Reserved_1 : 3; // max value 7
+	unsigned int P : 1;
+	unsigned int Type : 4;
+	unsigned int Reserved_2 : 8; // max value 255
+	unsigned int M : 1;
+	unsigned int Reserved_3 : 7; // max value 127
+	unsigned int Record_Count : 8;
+#else
+#error "Only little endian is supported"
+#endif
+} CLICK_SIZE_PACKED_ATTRIBUTE;
 
 #endif
