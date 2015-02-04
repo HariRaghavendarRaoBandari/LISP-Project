@@ -1,23 +1,38 @@
-#ifndef CLICK_LISPNONCE_HH
-#define CLICK_LISPNONCE_HH
+#ifndef CLICK_LISPNONCE64_HH
+#define CLICK_LISPNONCE64_HH
 
 #include <click/element.hh>
+
+// MRG32k3a defines
+#define NORM 2.328306549295728e-10
+#define m1   4294967087.0
+#define m2   4294944443.0
+#define a12     1403580.0
+#define a13n     810728.0
+#define a21      527612.0
+#define a23n    1370589.0
+#define SEED        12345
+
 CLICK_DECLS
 
 /*
 =c
 
-LISPNonce()
+LISPNonce64()
 
-=s LISPNonce
+=s LISPNonce64
 
-Add to the end of the packet SIZE bits of Nonce.
+Add 64 bits of Nonce.
+The Nonce is created using MRG32k3a pseudo-random algorithm.
 
 =d
 
-Add to the end of the packet SIZE bits of Nonce.
+Add 64 bits of Nonce.
  */
 class LISPNonce64 : public Element {
+	double s10, s11, s12, s20, s21, s22;
+	uint32_t MRG32k3a();
+
 	public:
 		LISPNonce64() CLICK_COLD;
 		~LISPNonce64() CLICK_COLD;
