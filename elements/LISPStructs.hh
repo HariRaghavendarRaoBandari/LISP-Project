@@ -35,4 +35,9 @@ struct LISPMapRegisterOuterHeader {
 #endif
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
+struct LISPMapRegister {
+	struct LISPMapRegisterOuterHeader header;
+	uint64_t nonce;
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
 #endif

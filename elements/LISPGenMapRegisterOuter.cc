@@ -19,7 +19,7 @@ Packet* LISPGenMapRegisterOuter::pull(int) {
 	data.M = 0;
 	data.Record_Count = 1;
 
-	WritablePacket *p = Packet::make(headroom, &data, sizeof(LISPMapRegisterOuterHeader), 20 * 7); // 20 est à modifier en fonction d'"Authentication Data"
+	WritablePacket *p = Packet::make(headroom, &data, sizeof(LISPMapRegister), 20 * 7); // 20 est à modifier en fonction d'"Authentication Data"
 
 	if (p == NULL) {
 		click_chatter("[-] Packet creation failed!");
