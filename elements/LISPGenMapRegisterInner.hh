@@ -30,7 +30,6 @@ https://tools.ietf.org/html/rfc6830#page-38
  */
 
 class LISPGenMapRegisterInner : public Element {
-	static const uint32_t headroom = sizeof(click_ip) + sizeof(click_udp) + sizeof(click_ether) + 3*4; //(3 * 4 bytes for OuterHeader)
 
 	public:
 		LISPGenMapRegisterInner() CLICK_COLD;
@@ -40,8 +39,7 @@ class LISPGenMapRegisterInner : public Element {
 		const char *port_count() const { return "0/1"; }
 		const char *processing() const { return PULL; }
 		int configure(Vector<String>&, ErrorHandler*) { return 0; }
-
-		Packet *pull(int);
+		Packet *simple_action(Packet *p);
 };
 
 CLICK_ENDDECLS
