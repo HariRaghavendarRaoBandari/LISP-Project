@@ -23,4 +23,11 @@ struct LISPMapRegisterInnerHeader {
 	unsigned int Authentication_Data;  // uncomment and modify if needed
 };
 
+struct LISPMapRegister {
+        //struct LISPMapRegisterOuterHeader headerOuter;
+        //uint32_t nonce1;
+        //uint32_t nonce2;
+		struct LISPMapRegisterInnerHeader headerInner;
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
 #endif
