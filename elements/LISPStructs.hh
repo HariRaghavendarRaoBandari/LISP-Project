@@ -41,4 +41,34 @@ struct LISPMapRegister {
 	uint32_t nonce2;
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
+/*
+ *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * |Type=1 |A|M|P|S|p|s|    Reserved     |   IRC   | Record Count  |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+struct LISPMapRequestOuterHeader {
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	unsigned int S : 1;
+	unsigned int P : 1;
+	unsigned int M : 1;
+	unsigned int A : 1;
+	unsigned int Type : 4;
+	unsigned int Reserved_1 : 6; // max value 0x3F
+	unsigned int p : 1;
+	unsigned int s : 1;
+	unsigned int IRC : 5;
+	unsigned int Reserved_2 : 3; // max value 7
+	unsigned int Record_Count : 8;
+#else
+#error "Only little endian is supported"
+#endif
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
+struct LISPMapRequest {
+	struct LISPMapRequestOuterHeader header;
+	uint32_t nonce1;
+	uint32_t nonce2;
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
 #endif
