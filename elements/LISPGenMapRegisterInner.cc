@@ -1,7 +1,7 @@
 #include <click/config.h>
 #include "LISPGenMapRegisterInner.hh"
 #include "LISPStructs.hh"
-#include "endian.h"
+#include "endian.hh"
 
 CLICK_DECLS
 
@@ -15,13 +15,14 @@ Packet* LISPGenMapRegisterInner::simple_action(Packet *p) {
 	
 	// Modify options below
 	mr->headerInner.Key_Id = KEY_ID_NONE;
-	mr->headerInner.Authentication_Data_Length = 0x00000004;
-	mr->headerInner.Authentication_Data = 0x00000000;
-	convert(&(mr->headerInner.Key_Id), 2);
+	mr->headerInner.Authentication_Data_Length = 4;
+	mr->headerInner.Authentication_Data = 0;
+	convert(&(mr->headerInner), 2);
 	// End of modification
 
 	return p;
 }
 
 CLICK_ENDDECLS
+ELEMENT_REQUIRES(userlevel Convert)
 EXPORT_ELEMENT(LISPGenMapRegisterInner)

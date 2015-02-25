@@ -1,8 +1,6 @@
 #ifndef CLICK_LISPGENMAPREGISTERINNER_HH
 #define CLICK_LISPGENMAPREGISTERINNER_HH
-
 #include <click/element.hh>
-
 CLICK_DECLS
 
 /*
@@ -30,8 +28,8 @@ https://tools.ietf.org/html/rfc6830#page-38
 class LISPGenMapRegisterInner : public Element {
 
 	public:
-		LISPGenMapRegisterInner() CLICK_COLD ;
-		~LISPGenMapRegisterInner() CLICK_COLD ;
+		LISPGenMapRegisterInner();
+		~LISPGenMapRegisterInner();
 
 		const char *class_name() const { return "LISPGenMapRegisterInner"; }
 		const char *port_count() const { return "0/1"; }
