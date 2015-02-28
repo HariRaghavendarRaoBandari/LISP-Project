@@ -32,7 +32,7 @@ class LISPGenMapRegisterInner : public Element {
 		~LISPGenMapRegisterInner();
 
 		const char *class_name() const { return "LISPGenMapRegisterInner"; }
-		const char *port_count() const { return "0/1"; }
+		const char *port_count() const { return "1/1"; }
 		const char *processing() const { return PULL; }
 		int configure(Vector<String>&, ErrorHandler*) { return 0; }
 		Packet *simple_action(Packet *p);
