@@ -2,11 +2,9 @@
 // (internet) < --[ eth0 ]----[ eth1 ]-- > (LAN)
 RequestEIDMapping :: {
 	input -> GetIPAddress(XXX)
-	-> ClearPacketData()
-	-> LISPGenMapRequestOuter()
-	-> LISPNonce(SIZE=64)
-	-> LISPGenMapRequest()
+	-> LISPGenMapRequest(IPADDR) /* IPADDR: adresse routabledu xTR */
 	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
+	-> EnsureEther()
 	-> ToDevice(eth0)
 	};
 
@@ -29,6 +27,7 @@ FromDevice(eth0) -> CheckIPHeader(14)
 	-> LISPNonce(SIZE=24)
 	-> LISPGenMSMRCommonBits()
 	-> UDPIPEncap(eth0.Addr, 4342, DST_ANNO, PORT)
+	-> EnsureEther()
 	-> ToDevice(eth0);
 
 c[1] -> LISPExtractEIDAndUpdateDB(); // le paquet est un Map Register
@@ -54,6 +53,7 @@ FromDevice(eth1)
 	-> LISPEncap()
 	-> Queue(XXX)
 	-> resolv :: LISPUDPIPEncap(CHECKSUM)
+	-> EnsureEther()
 	-> ToDevice(eth0);
 
 failResolvQueue :: Queue(XXX);
