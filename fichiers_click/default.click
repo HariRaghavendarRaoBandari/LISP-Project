@@ -9,11 +9,10 @@ RequestEIDMapping :: {
 	};
 
 // Ajouter un timer pour MapRegister
-// MapRegister reçoit un paquet vierge avec l’EID en annotation.
-MapRegister :: LISPGenMapRegisterOuter()
-	-> LISPNonce(SIZE=24)
-	-> LISPGenMapRegisterInner()
-	-> LISPGenMSMRCommonBits()
+MapRegister :: LISPGenMapRegister()
+	-> LISPRecordLocator(eth0.Addr, EIDADDR) /* EIDADDR a modifier pour avoir une version plus generique */
+	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
+	-> EnsureEther()
 	-> ToDevice(eth0);
 
 // Côté MSMR (une seule interface: eth0)
@@ -25,7 +24,7 @@ FromDevice(eth0) -> CheckIPHeader(14)
 	-> LISPGenMapReplyOuter()
 	-> Queue(XXX)
 	-> LISPNonce(SIZE=24)
-	-> LISPGenMSMRCommonBits()
+	-> LISPRecordLocator(eth0.Addr, EIDADDR) /* EIDADDR a modifier pour avoir une version plus generique */
 	-> UDPIPEncap(eth0.Addr, 4342, DST_ANNO, PORT)
 	-> EnsureEther()
 	-> ToDevice(eth0);
