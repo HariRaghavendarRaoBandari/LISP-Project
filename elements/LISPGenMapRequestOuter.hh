@@ -4,6 +4,7 @@
 #include <click/element.hh>
 #include <clicknet/udp.h>
 #include <clicknet/ether.h>
+#include "LISPStructs.hh"
 
 CLICK_DECLS
 
@@ -14,7 +15,9 @@ LISPGenMapRequestOuter()
 
 =s LISPGenMapRequestOuter
 
-Generates the outer common bytes of a MapRequest packet.
+Generates the outer common bytes of a MapRequest packet. Adjusts the size of
+the data buffer to fit only a LISPMapRequest structure (without the
+Map_Reply_Record field).
 
 =d
 
@@ -35,8 +38,11 @@ The "Record Count" field is fixed to 1.
 https://tools.ietf.org/html/rfc6830#section-6.1.2
  */
 class LISPGenMapRequestOuter : public Element {
-	static const uint32_t headroom = sizeof(click_ip) + sizeof(click_udp) +
-		sizeof(click_ether);
+	/*
+	 * This is the size a Map Request will have (Map_Reply_Record field
+	 * exluded).
+	 */
+	static const uint32_t proper_size = sizeof(LISPMapRequest) - sizeof(uint32_t);
 
 	public:
 		LISPGenMapRequestOuter() CLICK_COLD;

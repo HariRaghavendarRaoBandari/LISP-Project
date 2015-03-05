@@ -9,6 +9,13 @@ LISPGenMapRequestOuter::LISPGenMapRequestOuter() { }
 LISPGenMapRequestOuter::~LISPGenMapRequestOuter() { }
 
 Packet* LISPGenMapRequestOuter::simple_action(Packet *p) {
+
+	// Adjust the length of the packet data buffer
+	if (p->length() < proper_size) // "increase"
+		p = p->put(proper_size - p->length());
+	else if (p->length() > proper_size) // "shrink"
+		p->take(p->length() - proper_size);
+
 	LISPMapRequest *mr = (LISPMapRequest *) p->data();
 
 	mr->header.Type = LISP_H_TYPE_1;

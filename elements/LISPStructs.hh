@@ -53,6 +53,37 @@ struct LISPMapRegister {
 /*
  *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * |Type=2 |P|E|S|          Reserved               | Record Count  |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+
+struct LISPMapReplyOuterHeader {
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	/*
+	 * The Reserved field is splitted to align the fields on 8bits.
+	 */
+	unsigned int Reserved_1 : 1; // max value 1
+	unsigned int S : 1;
+	unsigned int E : 1;
+	unsigned int P : 1;
+	unsigned int Type : 4;
+	unsigned int Reserved_2 : 8; // max value 255
+	unsigned int Reserved_3 : 8; // max value 255
+	unsigned int Record_Count : 8;
+#else
+#error "Only little endian is supported"
+#endif
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
+struct LISPMapReply {
+	struct LISPMapReplyOuterHeader header;
+	uint32_t nonce1;
+	uint32_t nonce2;
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
+/*
+ *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * |Type=1 |A|M|P|S|p|s|    Reserved     |   IRC   | Record Count  |
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
