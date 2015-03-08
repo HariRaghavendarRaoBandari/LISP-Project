@@ -20,10 +20,9 @@ FromDevice(eth0) -> CheckIPHeader(14)
 	-> IPClassifier(udp port 4342,)
 	-> Strip(42)
 	-> c :: LISPClassifier
-	-> LISPExtractEIDGetRLOC() // le paquet est un Map Request
-	-> LISPGenMapReplyOuter()
 	-> Queue(XXX)
-	-> LISPNonce(SIZE=24)
+	-> LISPExtractEIDGetRLOC() // le paquet est un Map Request
+	-> LISPGenMapReply()
 	-> LISPRecordLocator(eth0.Addr, EIDADDR) /* EIDADDR a modifier pour avoir une version plus generique */
 	-> UDPIPEncap(eth0.Addr, 4342, DST_ANNO, PORT)
 	-> EnsureEther()

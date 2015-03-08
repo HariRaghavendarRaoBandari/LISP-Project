@@ -103,6 +103,7 @@ struct LISPMapRequest {
  *  +-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 struct LISPLocatorHeader {
+/*
 #if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
 	unsigned int Priority : 8;
 	unsigned int Weight : 8;
@@ -117,9 +118,31 @@ struct LISPLocatorHeader {
 #else
 #error "Only little endian is supported"
 #endif
+*/
+	unsigned int Priority:		8;
+	unsigned int Weight:		8;
+	unsigned int M_Priority:	8;
+	unsigned int M_Weight:		8;
+	unsigned int UnunsedFlags1:	8;
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	unsigned int R:			1;
+	unsigned int p:			1;
+	unsigned int L:			1;
+	unsigned int UnusedFlags2:	5;
+#elif CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
+	unsigned int UnusedFlags2:	5;
+	unsigned int L:			1;
+	unsigned int p:			1;
+	unsigned int R:			1;
+#else
+#error "Undefined Byte Order!"
+#endif
+	unsigned int Loc_AFI:		16;
+	unsigned int Locator:		32;
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
 struct LISPRecordLocatorHeader {
+/*
 #if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
 	unsigned int Record_TTL : 32;
 	unsigned int Locator_count : 8;
@@ -136,6 +159,30 @@ struct LISPRecordLocatorHeader {
 #else
 #error "Only little endian is supported"
 #endif
+*/
+	unsigned int Record_TTL: 	32;
+	unsigned int Locator_Count: 	8;
+	unsigned int EID_Mask_Len: 	8;
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	unsigned int Reserved1:		4;
+	unsigned int A:			1;
+	unsigned int ACT:		3;
+	unsigned int Reserved2:		8;
+	unsigned int Map_Version1:	4;
+	unsigned int Reserved3:		4; // Rsvd
+#elif CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
+	unsigned int ACT:		3;
+	unsigned int A:			1;
+	unsigned int Reserved1:		4;
+	unsigned int Reserved2:		8;
+	unsigned int Reserved3:		4; // Rsvd
+	unsigned int Map_Version1:	4;
+#else
+#error "Undefined Byte Order!"
+#endif
+	unsigned int Map_Version2:	8;
+	unsigned int EID_Prefix_AFI:	8;
+	unsigned int EID_Prefix:	16;
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
 /*
@@ -187,6 +234,126 @@ struct LISPMapRegister {
 #else
 #error "Only little endian is supported"
 #endif
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
+/*
+       Map-Reply Message Format
+        0                   1                   2                   3
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |Type=2 |P|E|S|          Reserved               | Record Count  |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                         Nonce . . .                           |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                         . . . Nonce                           |
+   +-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   |                          Record TTL                           |
+   |   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   R   | Locator Count | EID mask-len  | ACT |A|      Reserved         |
+   e   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   c   | Rsvd  |  Map-Version Number   |       EID-Prefix-AFI          |
+   o   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   r   |                          EID-Prefix                           |
+   d   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  /|    Priority   |    Weight     |  M Priority   |   M Weight    |
+   | L +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | o |        Unused Flags     |L|p|R|           Loc-AFI             |
+   | c +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  \|                             Locator                           |
+   +-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+*/
+
+/*
+ *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ * |Type=2 |P|E|S|          Reserved               | Record Count  |
+ * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ */
+struct LISPMapReplyOuterHeader {
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	/*
+	 * The Reserved field is splitted to align the fields on 8bits.
+	 */
+	unsigned int Reserved_1 : 1; // max value 1
+	unsigned int S : 1;
+	unsigned int E : 1;
+	unsigned int P : 1;
+	unsigned int Type : 4;
+#elif CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
+	unsigned int Type : 4;
+	unsigned int P : 1;
+	unsigned int E : 1;
+	unsigned int S : 1;
+	unsigned int Reserved_1 : 1; // max value 1
+#else
+#error "Undefined Byte Order!"
+#endif
+	unsigned int Reserved_2 : 8; // max value 255
+	unsigned int Reserved_3 : 8; // max value 255
+	unsigned int Record_Count : 8;
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
+
+/* TODO remove
+ *	struct Inner Header 
+struct LISPMapReplyInnerHeader {
+	unsigned int Record_TTL: 	32;
+	unsigned int Locator_Count: 	8;
+	unsigned int EID_Mask_Len: 	8;
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	unsigned int Reserved1:		4;
+	unsigned int A:			1;
+	unsigned int ACT:		3;
+	unsigned int Reserved2:		8;
+	unsigned int Map_Version1:	4;
+	unsigned int Reserved3:		4; // Rsvd
+#elif CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
+	unsigned int ACT:		3;
+	unsigned int A:			1;
+	unsigned int Reserved1:		4;
+	unsigned int Reserved2:		8;
+	unsigned int Reserved3:		4; // Rsvd
+	unsigned int Map_Version1:	4;
+#else
+#error "Undefined Byte Order!"
+#endif
+	unsigned int Map_Version2:	8;
+	unsigned int EID_Prefix_AFI:	8;
+	unsigned int EID_Prefix:	16;
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+ */
+
+/* TODO remove
+struct LISPMapReplyLoc {
+	unsigned int Priority:		8;
+	unsigned int Weight:		8;
+	unsigned int M_Priority:	8;
+	unsigned int M_Weight:		8;
+	unsigned int UnunsedFlags1:	8;
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	unsigned int R:			1;
+	unsigned int p:			1;
+	unsigned int L:			1;
+	unsigned int UnusedFlags2:	5;
+#elif CLICK_BYTE_ORDER == CLICK_BIG_ENDIAN
+	unsigned int UnusedFlags2:	5;
+	unsigned int L:			1;
+	unsigned int p:			1;
+	unsigned int R:			1;
+#else
+#error "Undefined Byte Order!"
+#endif
+	unsigned int Loc_AFI:		16;
+	unsigned int Locator:		32;
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+*/
+
+struct LISPMapReply {
+	struct LISPMapReplyOuterHeader oh;
+	uint32_t nonce1;
+	uint32_t nonce2;
+	struct LISPMapReplyInnerHeader ih;
+	struct LISPMapReplyLoc loc;
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
 #endif
