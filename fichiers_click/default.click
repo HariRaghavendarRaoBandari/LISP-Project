@@ -47,13 +47,13 @@ FromDevice(eth0)
 // Encapsulation d’un paquet
 FromDevice(eth1)
 	-> CheckIPHeader(14)
-	-> LISPEncap()
+	-> LISPUDPIPEncap()
 	-> Queue(XXX)
-	-> resolv :: LISPUDPIPEncap(CHECKSUM)
+	-> resolv :: LISPResolv
 	-> EnsureEther()
 	-> ToDevice(eth0);
 
 failResolvQueue :: Queue(XXX);
-resolv[1] -> Unqueue() -> tee :: Tee -> failResolvQueue;
+resolv[1] -> tee :: Tee -> failResolvQueue;
 tee[1] -> Queue(1) -> RequestEIDMapping;
 failResolvQueue -> resolv;
