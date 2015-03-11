@@ -1,29 +1,21 @@
 #include <click/config.h>
 #include <click/hashtable.hh>
-#include "EIDToRLOC.hh"
+#include "LISPDB.hh"
 
 CLICK_DECLS
 
-static HashTable<uint32_t, uint32_t> rloc2eid, eid2rloc;
+static HashTable<uint32_t, uint32_t> eid2rloc;
 
 void setEIDToRLOC(uint32_t eid, uint32_t rloc) {
 	eid2rloc[eid] = rloc;
-}
-
-void setRLOCToEID(uint32_t rloc, uint32_t eid) {
-	rloc2eid[rloc] = eid;
 }
 
 uint32_t getRLOCFromEID(uint32_t eid) {
 	return eid2rloc[eid];
 }
 
-uint32_t getEIDFromRLOC(uint32_t rloc) {
-	return rloc2eid[eid];
-}
-
-HashTable<uint32_t, uint32_t>::iterator getIterator(bool isEIDToRLOC) {
-	return isEIDToRLOC ? eid2rloc.begin() : rloc2eid.begin();
+HashTable<uint32_t, uint32_t>::iterator getIterator() {
+	return eid2rloc.begin();
 }
 
 CLICK_ENDDECLS
