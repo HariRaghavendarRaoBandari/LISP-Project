@@ -1,7 +1,7 @@
 #include <click/config.h>
 #include "LISPMapReply.hh"
 #include "LISPStructs.hh"
-#include "LISPMsMr.hh"
+#include "LISPDB.hh"
 
 CLICK_DECLS
 
@@ -76,7 +76,7 @@ Packet* LISPGenMapReply::simple_action(int i, Packet* inP) {
 	setInnerHeader(reply);
 
 
-	set_user_anno_i(USER_ANNO_EID, htonl(getRloc(request->inner.EID_prefix)));
+	set_user_anno_i(USER_ANNO_EID, htonl(getRLOCFromEID(request->inner.EID_prefix)));
 	//setLocator(reply);
 
 	// destroy request packet.
