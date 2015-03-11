@@ -1,14 +1,34 @@
 #include <click/config.h>
 #include "LISPEncapsulation.hh"
 #include "LISPStructs.hh"
+#include <clicknet/udp.h>
 #include <clicknet/ip.h>
+#include <click/args.hh>
 #include <click/packet.hh>
+#include <click/error.hh>
 
 CLICK_DECLS
 
 LISPEncapsulation::LISPEncapsulation() { }
 
 LISPEncapsulation::~LISPEncapsulation() { }
+
+int
+LISPEncapsulation::configure(Vector<String> &conf, ErrorHandler *errh)
+{
+    IPAddress saddr;
+    uint16_t sport;
+
+    if (Args(conf, this, errh)
+	.read_mp("SRC", saddr)
+	.read_mp("SPORT", IPPortArg(IP_PROTO_UDP), sport)
+	.complete() < 0){
+		return -1;
+    }
+    _saddr = saddr;
+    _sport = htons(sport);
+    return 0;
+}
 
 Packet* LISPEncapsulation::simple_action(Packet *p){
 	/*
@@ -21,30 +41,18 @@ Packet* LISPEncapsulation::simple_action(Packet *p){
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	*/
 
-	// Récupération du inner-header
+	// Récupération pointeur sur inner_header
 
-	click_ip* inner_header = (click_ip*) p->data();
-	
-	uint8_t ip_ttl_ih = inner_header->ip_ttl;
-	uint8_t ip_tos_ih = inner_header->ip_tos;
-	
-	/* 
-	 * Annotations
-	 * /!\ ATTENTION RISQUE DE PROBLEMES /!\
-	 * Offset de 0 et de 1 mais risque d'erreur
-	 *
-	 * set_anno_u8 (0, ip_ttl_ih);
-	 * set_anno_u8 (1, ip_tos_ih);
-	 */
+	click_ip* inner_ip = (click_ip*) p->data();
 
 	// Modification taille paquet
 
 	p = p->push(sizeof(struct LISPHeader)); // On agrandit le header de la taille de la structure LISPHeader
 
-	struct LISPHeader *lh = (struct LISPHeader*) p->data(); // Notre pointeur inner_header pointe desormais sur le début de notre structure LISPHeader
+	struct LISPHeader *lh = (struct LISPHeader*) p->data(); // Notre pointeur inner_ip pointe desormais sur le début de notre structure LISPHeader
 
 
-	// Initialisation des valeurs
+	// Initialisation des valeurs pour LISP
 	lh->N = 0;
 	lh->L = 0;
 	lh->E = 0;
@@ -58,6 +66,55 @@ Packet* LISPEncapsulation::simple_action(Packet *p){
 	lh->firstLine_2 = 0;
 	lh->firstLine_3 = 0;
 	lh->secondLine = 0;
+
+	// Initialisation des valeurs pour OUTERHEADER UDPIP
+	
+	p = p->push(sizeof(click_udp) + sizeof(click_ip));
+	click_ip *ip = (click_ip *)(p->data());
+	click_udp *udp = (click_udp *)(ip + 1);
+
+	#if !HAVE_INDIFFERENT_ALIGNMENT
+	assert((uintptr_t)ip % 4 == 0);
+	#endif
+
+	// set up IP header
+	ip->ip_v = 4;
+	ip->ip_hl = sizeof(click_ip) >> 2;
+	ip->ip_len = htons(p->length());
+	ip->ip_id = htons(inner_ip->ip_id);
+	ip->ip_p = 17; // Num Protocole UDP = 17
+	ip->ip_src = _saddr;
+	ip->ip_dst = inner_ip->ip_dst;
+	ip->ip_dst = p->dst_ip_anno(); // Ajout de l'annotation
+	p->set_dst_ip_anno(IPAddress(inner_ip->ip_dst));
+	
+
+	ip->ip_tos = inner_ip->ip_tos; // On récupère la valeur du paquet encapsulé
+	ip->ip_off = 0;
+	ip->ip_ttl = inner_ip->ip_ttl; // On récupère la valeur du paquet encapsulé
+	
+	ip->ip_sum = 0;
+	/*
+	#if HAVE_FAST_CHECKSUM && FAST_CHECKSUM_ALIGNED
+	if (_aligned)
+	ip->ip_sum = ip_fast_csum((unsigned char *)ip, sizeof(click_ip) >> 2);
+	else
+	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
+	#elif HAVE_FAST_CHECKSUM
+	ip->ip_sum = ip_fast_csum((unsigned char *)ip, sizeof(click_ip) >> 2);
+	#else
+	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
+	#endif
+	*/
+
+	p->set_ip_header(ip, sizeof(click_ip));
+
+	// set up UDP header
+	udp->uh_sport = _sport;
+	udp->uh_dport = (uint16_t) htons(4341);
+	uint16_t len = p->length() - sizeof(click_ip);
+	udp->uh_ulen = htons(len);
+	udp->uh_sum = 0;
 
 	return p;
 	
