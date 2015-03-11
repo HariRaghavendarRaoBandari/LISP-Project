@@ -1,7 +1,6 @@
 #include <click/config.h>
 #include "LISPGenMapRegisterInner.hh"
 #include "LISPStructs.hh"
-#include "endian.hh"
 
 #include <arpa/inet.h>
 
@@ -26,5 +25,4 @@ Packet* LISPGenMapRegisterInner::simple_action(Packet *p) {
 }
 
 CLICK_ENDDECLS
-ELEMENT_REQUIRES(userlevel Convert)
 EXPORT_ELEMENT(LISPGenMapRegisterInner)

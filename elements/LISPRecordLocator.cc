@@ -1,7 +1,6 @@
 #include <click/config.h>
 #include "LISPRecordLocator.hh"
 #include "LISPStructs.hh"
-#include "endian.hh"
 
 CLICK_DECLS
 
@@ -14,10 +13,10 @@ Packet* LISPRecordLocator::simple_action(Packet *p) {
 	LISPMapRegister *mr = (LISPMapRegister *) (p->data());
 	
 	// Modify options below
-	mr->recLoc.Record_TTL = htonl(10); //mapping gardé en cache 10 mins
+	mr->recLoc.Record_TTL = 0; //mapping gardé en cache 10 mins
 	mr->recLoc.Locator_count = 1; //un seul locator necessaire ici (voir aucun, a voir)
 	mr->recLoc.EID_mask_len = 32; // permet un sous réseau de 1 adresse
-	mr->recLoc.ACT = 4; 	
+	mr->recLoc.ACT = 0; 	
 	mr->recLoc.A = 1;
 	mr->recLoc.Reserved = 0; //si different de 0 utiliser htons
 	mr->recLoc.Rsvd1 = 0;
@@ -43,5 +42,4 @@ Packet* LISPRecordLocator::simple_action(Packet *p) {
 }
 
 CLICK_ENDDECLS
-ELEMENT_REQUIRES(userlevel Convert)
 EXPORT_ELEMENT(LISPRecordLocator)

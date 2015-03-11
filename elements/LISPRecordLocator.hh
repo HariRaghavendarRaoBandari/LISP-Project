@@ -18,10 +18,6 @@ Generates the record/locator bytes of a MapRegister request.
 The record/locator bytes for a MapRegister request correspond to the bytes starting
 after the authentication_data bytes to the end of the paquet.
 
-The "key ID" field is fixed to 0 for now.
-The "Authentification Data Length" field is fixed to 0 as of now.
-The "Authentification Data" field is non-exiting as of now.
-
 =a
 https://tools.ietf.org/html/rfc6830#section-6.1.4
  */
