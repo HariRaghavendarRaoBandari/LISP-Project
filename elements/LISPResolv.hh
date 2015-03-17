@@ -2,6 +2,8 @@
 #define CLICK_LISPRESOLV_HH
 
 #include <click/element.hh>
+#include <click/timer.hh>
+#include <click/hashtable.hh>
 
 CLICK_DECLS
 
@@ -29,10 +31,20 @@ The dst_ip_anno annotation _must_ be set before calling this element.
 
 LISPDB is used for the EID -> RLOC mapping.
 
+This element has as expiration table for destination EIDs. If an EID expires it
+is removed from the Database. This method is used to re-request a RLOC for the
+destination EID, it's usefull if the destination move. The max TTL is 5 by
+default but can be configured with the MAXTTL keyword.
+
 =a LISPDB
 */
 
 class LISPResolv : public Element {
+	HashTable<uint32_t, int> _eid_cache;
+	Timer _timer;
+	int _max_cache_ttl;
+
+	void run_timer(Timer *t);
 public:
 	LISPResolv() CLICK_COLD;
 	~LISPResolv() CLICK_COLD;
@@ -42,6 +54,8 @@ public:
 	const char *processing() const { return PROCESSING_A_AH; }
 
 	Packet *simple_action(Packet *);
+	int initialize(ErrorHandler *);
+	int configure(Vector<String> &conf, ErrorHandler *errh);
 };
 
 CLICK_ENDDECLS
