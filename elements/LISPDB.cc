@@ -14,6 +14,10 @@ uint32_t getRLOCFromEID(uint32_t eid) {
 	return eid2rloc[eid];
 }
 
+void eraseEID(uint32_t eid) {
+	eid2rloc.erase(eid);
+}
+
 HashTable<uint32_t, uint32_t>::iterator getIterator() {
 	return eid2rloc.begin();
 }

@@ -10,6 +10,8 @@ void setEIDToRLOC(uint32_t eid, uint32_t rloc);
 
 uint32_t getRLOCFromEID(uint32_t eid);
 
+void eraseEID(uint32_t eid);
+
 HashTable<uint32_t, uint32_t>::iterator getIterator();
 
 CLICK_ENDDECLS
