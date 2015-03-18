@@ -82,8 +82,8 @@ struct LISPRecordLocatorHeader {
 #error "Undefined Byte Order!"
 #endif
 	unsigned int Map_Version2:	8;
-	unsigned int EID_Prefix_AFI:	8;
-	unsigned int EID_Prefix:	16;
+	unsigned int EID_Prefix_AFI: 16;
+	unsigned int EID_Prefix:	32;
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
 
