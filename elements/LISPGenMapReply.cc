@@ -1,7 +1,7 @@
 #include <click/config.h>
 #include "LISPGenMapReply.hh"
 #include "LISPStructs.hh"
-#include "LISPMsMr.hh"
+#include "LISPDB.hh"
 
 CLICK_DECLS
 
@@ -36,6 +36,7 @@ void LISPGenMapReply::setInnerHeader(LISPMapReply* reply) {
 
 void LISPGenMapReply::setLocator(LISPMapReply* reply ) {
 	reply->loc.Priority = 0;
+	reply->loc.UnusedFlags2 = 0;
 	reply->loc.Weight = 0;
 	reply->loc.M_Priority = 0;
 	reply->loc.M_Weight = 0;
@@ -62,6 +63,7 @@ Packet* LISPGenMapReply::simple_action(int i, Packet* inP) {
 
 	reply->ih.EID_Prefix = request->inner.EID_prefix;
 	// TODO call prefix-check
+
 	unsigned int locator = htonl(getRloc(request->inner.EID_prefix));
 	reply->ih.Locator_Count = (locator == 0) ? 0 : 1;
 	reply->loc.Locator = locator;
@@ -84,3 +86,4 @@ Packet* LISPGenMapReply::simple_action(int i, Packet* inP) {
 
 CLICK_ENDDECLS
 EXPORT_ELEMENT(LISPGenMapReply)
+o

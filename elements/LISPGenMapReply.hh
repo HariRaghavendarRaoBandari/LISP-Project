@@ -1,6 +1,5 @@
 #ifndef CLICK_LISPGENMAPREPLY_HH
 #define CLICK_LISPGENMAPREPLY_HH
-
 #include "LISPStructs.hh"
 #include <click/element.hh>
 #include <clicknet/udp.h>
@@ -53,7 +52,8 @@ The outer common bytes for a MapReply request correspond to the first 4 bytes of
 =a
 https://tools.ietf.org/html/rfc6830#section-6.1.4
  */
-class LISPGenMapReply: public Element {
+
+class LISPGenMapReply : public Element {
 public:
 	LISPGenMapReply() ;
 	~LISPGenMapReply() ;

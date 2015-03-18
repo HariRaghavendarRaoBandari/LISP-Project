@@ -23,6 +23,7 @@ Packet* LISPGenMapRegister::pull(int) {
 	mr.Key_Id = KEY_ID_HMAC_SHA_1_96 ;
 	mr.Authentication_Data_Length = htons(4);
 	mr.Authentication_Data = 0; // htons(0) = 0
+	
 
 	WritablePacket *p = Packet::make(headroom, &mr, sizeof(LISPMapRegister), 0);
 
