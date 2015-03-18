@@ -2,20 +2,17 @@
 // (internet) < --[ eth0 ]----[ eth1 ]-- > (LAN)
 RequestEIDMapping :: {
 	input -> GetIPAddress(XXX)
-	-> ClearPacketData()
-	-> LISPGenMapRequestOuter()
-	-> LISPNonce(SIZE=64)
-	-> LISPGenMapRequest()
+	-> LISPGenMapRequest(IPADDR) /* IPADDR: adresse routabledu xTR */
 	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
+	-> EnsureEther()
 	-> ToDevice(eth0)
 	};
 
 // Ajouter un timer pour MapRegister
-// MapRegister reçoit un paquet vierge avec l’EID en annotation.
-MapRegister :: LISPGenMapRegisterOuter()
-	-> LISPNonce(SIZE=24)
-	-> LISPGenMapRegisterInner()
-	-> LISPGenMSMRCommonBits()
+MapRegister :: LISPGenMapRegister()
+	-> LISPRecordLocator(eth0.Addr, EIDADDR) /* EIDADDR a modifier pour avoir une version plus generique */
+	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
+	-> EnsureEther()
 	-> ToDevice(eth0);
 
 // Côté MSMR (une seule interface: eth0)
@@ -23,12 +20,12 @@ FromDevice(eth0) -> CheckIPHeader(14)
 	-> IPClassifier(udp port 4342,)
 	-> Strip(42)
 	-> c :: LISPClassifier
-	-> LISPExtractEIDGetRLOC() // le paquet est un Map Request
-	-> LISPGenMapReplyOuter()
 	-> Queue(XXX)
-	-> LISPNonce(SIZE=24)
-	-> LISPGenMSMRCommonBits()
+	-> LISPExtractEIDGetRLOC() // le paquet est un Map Request
+	-> LISPGenMapReply()
+	-> LISPRecordLocator(eth0.Addr, EIDADDR) /* EIDADDR a modifier pour avoir une version plus generique */
 	-> UDPIPEncap(eth0.Addr, 4342, DST_ANNO, PORT)
+	-> EnsureEther()
 	-> ToDevice(eth0);
 
 c[1] -> LISPExtractEIDAndUpdateDB(); // le paquet est un Map Register
@@ -54,6 +51,7 @@ FromDevice(eth1)
 	-> LISPEncap()
 	-> Queue(XXX)
 	-> resolv :: LISPUDPIPEncap(CHECKSUM)
+	-> EnsureEther()
 	-> ToDevice(eth0);
 
 failResolvQueue :: Queue(XXX);
