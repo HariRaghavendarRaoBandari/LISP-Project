@@ -291,4 +291,37 @@ struct LISPMapRegister {
 	struct LISPMapReplyLoc loc;
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
+struct LISPHeader {
+
+#if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
+	/*
+     *  0                   1                   2                   3
+     *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *  |N|L|E|V|I|flags|            Nonce/Map-Version                  |
+     *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *  |                 Instance ID/Locator-Status-Bits               |
+     *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	 */
+
+    unsigned int flags : 3; // Les 3 bits du champs flags sont réservé à un usage futur
+    unsigned int I : 1; /* Instance ID bit : Quand = 1, les 'Locator-Status-Bits' sont réduit à 8 bits et 24 bits de poid fort
+    					 * sont un Instance ID. Si L = 0, alors 8 bits de poid faible sont des 0 et ignorés à la reception */
+    
+    unsigned int V : 1; // Map-Version present bit : Quand = 1 vérif Map-Version et si V = 1 alors N = 0
+    unsigned int E : 1; // Echo-nonce-request bit : Quand = 1 ET N = 1, un ITR demande à l'ETR de retourner le Nonce pour verif chemin. 
+    unsigned int L : 1; // Locator-Status-Bits bit : Quand = 1, les Locator-Status-Bits des seconds 32 bits sont utilisés.
+    unsigned int N : 1; // Nonce-bit : Quand = 1 les 24 bits de poids faible des 32 premiers bits contiennent un Nonce
+ 
+
+	unsigned int firstLine_1 : 8; // 24 bits de poids faible des 32 premiers bits du header LISP. Peuvent être Nonce ou Map-Version
+	unsigned int firstLine_2 : 8;
+	unsigned int firstLine_3 : 8;
+	unsigned int secondLine : 32; // 32 seconds bits du header LISP. Peuvent être Instance ID ou Locator-Status-Bits
+
+#else
+#error "Only little endian is supported"
+#endif
+} CLICK_SIZE_PACKED_ATTRIBUTE;
+
 #endif
