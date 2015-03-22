@@ -66,7 +66,7 @@ public:
 	void setInnerHeader(LISPMapReply*); // set inner header fixed bytes
 	void setLocator(LISPMapReply*);	    // set locator field fixed bytes
 
-	Packet *simple_action(int, Packet* p);
+	Packet *simple_action(Packet* p);
 };
 
 CLICK_ENDDECLS

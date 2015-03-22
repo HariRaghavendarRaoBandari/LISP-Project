@@ -46,7 +46,7 @@ void LISPGenMapReply::setLocator(LISPMapReply* reply ) {
 	reply->loc.Loc_AFI = AFI_IPV4;
 }
 
-Packet* LISPGenMapReply::simple_action(int i, Packet* inP) {
+Packet* LISPGenMapReply::simple_action(Packet* inP) {
 
 	// extract EID and resolv RLOC
 	/*
@@ -61,10 +61,10 @@ Packet* LISPGenMapReply::simple_action(int i, Packet* inP) {
 	LISPMapReply *reply = (LISPMapReply*) outP->data();
 	LISPMapRequest *request = (LISPMapRequest*) inP->uniqueify()->data();
 
-	reply->rec.EID_Prefix = request->inner.EID_prefix;
+	reply->rec.EID_Prefix = request->EID_prefix;
 	// TODO call prefix-check
 
-	unsigned int locator = htonl(getRloc(request->inner.EID_prefix));
+	unsigned int locator = htonl(getRLOCFromEID(request->EID_prefix));
 	reply->rec.Locator_Count = (locator == 0) ? 0 : 1;
 	reply->loc.Locator = locator;
 
@@ -86,4 +86,3 @@ Packet* LISPGenMapReply::simple_action(int i, Packet* inP) {
 
 CLICK_ENDDECLS
 EXPORT_ELEMENT(LISPGenMapReply)
-o

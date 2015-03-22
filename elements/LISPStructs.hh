@@ -41,7 +41,7 @@ struct LISPLocatorHeader {
 	unsigned int Weight:		8;
 	unsigned int M_Priority:	8;
 	unsigned int M_Weight:		8;
-	unsigned int UnunsedFlags1:	8;
+	unsigned int UnusedFlags1:	8;
 #if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
 	unsigned int R:			1;
 	unsigned int p:			1;
