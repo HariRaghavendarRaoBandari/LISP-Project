@@ -24,18 +24,18 @@ Packet* LISPRecordLocator::simple_action(Packet *p) {
 	LISPMapRegister *mr = (LISPMapRegister *) (p->data());
 
 	// Modify options below
-	mr->ih.Record_TTL = 0; //mapping gardé en cache 10 mins
-	mr->ih.Locator_Count = 1; //un seul locator necessaire ici (voir aucun, a voir)
-	mr->ih.EID_Mask_Len = 32; // permet un sous réseau de 1 adresse
-	mr->ih.A = 1;
-	mr->ih.ACT = 0; 	
-	mr->ih.Reserved1 = 0; //si different de 0 utiliser htons
-	mr->ih.Reserved2 = 0;
-	mr->ih.Reserved3 = 0;
-	mr->ih.Map_Version1 = 0;
-	mr->ih.Map_Version2 = 0;	
-	mr->ih.EID_Prefix_AFI = htons(1); //1 pour ipv4, 2 pour ipv6
-	mr->ih.EID_Prefix = htonl(0xC0A8032A); // le map register ne gère que cette adresse, choisie ici arbitrairement 192.168.3.42
+	mr->rec.Record_TTL = 0; //mapping gardé en cache 10 mins
+	mr->rec.Locator_Count = 1; //un seul locator necessaire ici (voir aucun, a voir)
+	mr->rec.EID_Mask_Len = 32; // permet un sous réseau de 1 adresse
+	mr->rec.A = 1;
+	mr->rec.ACT = 0; 	
+	mr->rec.Reserved1 = 0; //si different de 0 utiliser htons
+	mr->rec.Reserved2 = 0;
+	mr->rec.Reserved3 = 0;
+	mr->rec.Map_Version1 = 0;
+	mr->rec.Map_Version2 = 0;	
+	mr->rec.EID_Prefix_AFI = htons(1); //1 pour ipv4, 2 pour ipv6
+	mr->rec.EID_Prefix = htonl(0xC0A8032A); // le map register ne gère que cette adresse, choisie ici arbitrairement 192.168.3.42
 	mr->loc.Priority = 0; //priorité des rlocs pour unicast, de 0 à 255 (255 = rloc a ne pas utiliser pour le forwarding unicast)
 	mr->loc.Weight = 0; //all weight are set to 0, un algo de hash simple sera utilisé pour distribuer la charge
 	mr->loc.M_Priority = 0; //ON FAIT PAS DE MULTICAST

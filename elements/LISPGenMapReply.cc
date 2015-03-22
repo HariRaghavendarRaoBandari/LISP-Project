@@ -22,16 +22,16 @@ void LISPGenMapReply::setOuterHeader(LISPMapReply* reply ) {
 }
 
 void LISPGenMapReply::setInnerHeader(LISPMapReply* reply) {
-	reply->ih.Record_TTL = 0xFFFFFFFF; // recipient decide locally how long to store the mapping
-	reply->ih.EID_Mask_Len = 32; // fixed to 32bit mask len
-	reply->ih.ACT = 0;
-	reply->ih.A = 0;
-	reply->ih.Reserved1 = 0;
-	reply->ih.Reserved2 = 0;
-	reply->ih.Reserved3 = 0;
-	reply->ih.Map_Version1 = 0;
-	reply->ih.Map_Version2 = 0;
-	reply->ih.EID_Prefix_AFI = AFI_IPV4; // fixed to IPv4
+	reply->rec.Record_TTL = 0xFFFFFFFF; // recipient decide locally how long to store the mapping
+	reply->rec.EID_Mask_Len = 32; // fixed to 32bit mask len
+	reply->rec.ACT = 0;
+	reply->rec.A = 0;
+	reply->rec.Reserved1 = 0;
+	reply->rec.Reserved2 = 0;
+	reply->rec.Reserved3 = 0;
+	reply->rec.Map_Version1 = 0;
+	reply->rec.Map_Version2 = 0;
+	reply->rec.EID_Prefix_AFI = AFI_IPV4; // fixed to IPv4
 }
 
 void LISPGenMapReply::setLocator(LISPMapReply* reply ) {
@@ -61,11 +61,11 @@ Packet* LISPGenMapReply::simple_action(int i, Packet* inP) {
 	LISPMapReply *reply = (LISPMapReply*) outP->data();
 	LISPMapRequest *request = (LISPMapRequest*) inP->uniqueify()->data();
 
-	reply->ih.EID_Prefix = request->inner.EID_prefix;
+	reply->rec.EID_Prefix = request->inner.EID_prefix;
 	// TODO call prefix-check
 
 	unsigned int locator = htonl(getRloc(request->inner.EID_prefix));
-	reply->ih.Locator_Count = (locator == 0) ? 0 : 1;
+	reply->rec.Locator_Count = (locator == 0) ? 0 : 1;
 	reply->loc.Locator = locator;
 
 	setOuterHeader(reply);
