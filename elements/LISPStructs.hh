@@ -200,9 +200,9 @@ struct LISPMapRegister {
 	uint32_t nonce2;
 	unsigned int Key_Id : 16; // 16 bits but we use a mask here
 	unsigned int Authentication_Data_Length : 16; // number of bytes for Authentication_Data field -- 16 bits but we use a mask here
-	unsigned int Authentication_Data : 32;  // uncomment and modify if needed
-	struct LISPLocatorHeader loc;
+	//unsigned int Authentication_Data : 32;  // uncomment and modify if needed
 	struct LISPRecordLocatorHeader rec;
+	struct LISPLocatorHeader loc;
 #else
 #error "Only little endian is supported"
 #endif

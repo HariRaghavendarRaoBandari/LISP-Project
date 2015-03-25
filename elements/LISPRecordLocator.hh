@@ -9,7 +9,7 @@ CLICK_DECLS
 /*
 =c
 
-LISPRecordLocator(RLOCIPADDR, EIDIPADDR)
+LISPRecordLocator(RLOCIPADDR)
 
 =s LISPRecordLocator
 
@@ -33,14 +33,14 @@ starting after the authentication_data bytes to the end of the paquet.
 Map-Reply).
 "Loc-AFI" is fixed to AFI_IPV4 (1).
 
-RLOCIPADDR and EIDIPADDR must be specified as valid IPv4 addresses.
+RLOCIPADDR must be specified as a valid IPv4 addresse.
 
 =a
 https://tools.ietf.org/html/rfc6830#section-6.1.4
  */
 
 class LISPRecordLocator : public Element {
-	IPAddress rloc_ip, eid_ip;
+	IPAddress _rloc_ip;
 
 	public:
 		LISPRecordLocator();

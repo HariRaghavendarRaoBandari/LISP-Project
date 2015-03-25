@@ -2,16 +2,16 @@
 #include <click/args.hh>
 #include <click/error.hh>
 #include <click/glue.hh>
-#include "LISPGenMapRegisterOuter.hh"
+#include "LISPGenMapRegister.hh"
 #include "LISPStructs.hh"
 
 CLICK_DECLS
 
-LISPGenMapRegisterOuter::LISPGenMapRegisterOuter() { }
+LISPGenMapRegister::LISPGenMapRegister() { }
 
-LISPGenMapRegisterOuter::~LISPGenMapRegisterOuter() { }
+LISPGenMapRegister::~LISPGenMapRegister() { }
 
-int LISPGenMapRegisterOuter::configure(Vector<String>& conf, ErrorHandler *errh) {
+int LISPGenMapRegister::configure(Vector<String>& conf, ErrorHandler *errh) {
 	Vector<IPAddress> ips;
 
 	if (Args(conf, this, errh).read_all("EID", IPAddressArg(), ips).complete() < 0)
@@ -28,7 +28,7 @@ int LISPGenMapRegisterOuter::configure(Vector<String>& conf, ErrorHandler *errh)
 	return _ip_vector.size();
 }
 
-Packet* LISPGenMapRegisterOuter::pull(int) {
+Packet* LISPGenMapRegister::pull(int) {
 
 	if (!_ip_vector.empty()) {
 		/*
@@ -44,8 +44,13 @@ Packet* LISPGenMapRegisterOuter::pull(int) {
 		data.Reserved_3 = 0;
 		data.M = 0;
 		data.Record_Count = 1;
+		data.nonce1 = click_random();
+		data.nonce2 = click_random();
+		data.Key_Id = KEY_ID_NONE;
+		data.Authentication_Data_Length = 0;
 
-		WritablePacket *p = Packet::make(headroom, &data, sizeof(LISPMapRegister), 20 * 7); // 20 est à modifier en fonction d'"Authentication Data"
+
+		WritablePacket *p = Packet::make(headroom, &data, sizeof(LISPMapRegister), 0);
 
 		if (p == NULL) {
 			click_chatter("[-] Packet creation failed!");
@@ -56,7 +61,7 @@ Packet* LISPGenMapRegisterOuter::pull(int) {
 		 * When the annotation for the packet is set, the EID in
 		 * _ip_vector is removed.
 		 */
-		p->set_dst_ip_anno(IPAddress(*_ip_vector.begin()));
+		p->set_anno_u32(USER_ANNO_EID, IPAddress(*_ip_vector.begin()));
 		_ip_vector.erase(_ip_vector.begin());
 
 		return p;
@@ -67,8 +72,8 @@ Packet* LISPGenMapRegisterOuter::pull(int) {
 
 enum { H_EID_VECTOR }; // This will be vparam in handler's callbacks
 
-String LISPGenMapRegisterOuter::read_callback(Element *e, void *vparam) {
-	LISPGenMapRegisterOuter *mr = static_cast<LISPGenMapRegisterOuter *>(e);
+String LISPGenMapRegister::read_callback(Element *e, void *vparam) {
+	LISPGenMapRegister *mr = static_cast<LISPGenMapRegister *>(e);
 
 	if ((intptr_t) vparam != H_EID_VECTOR)
 		return "";
@@ -89,8 +94,8 @@ String LISPGenMapRegisterOuter::read_callback(Element *e, void *vparam) {
 	return res;
 }
 
-int LISPGenMapRegisterOuter::write_callback(const String &s, Element *e, void *vparam, ErrorHandler *errh) {
-	LISPGenMapRegisterOuter *mr = static_cast<LISPGenMapRegisterOuter *>(e);
+int LISPGenMapRegister::write_callback(const String &s, Element *e, void *vparam, ErrorHandler *errh) {
+	LISPGenMapRegister *mr = static_cast<LISPGenMapRegister *>(e);
 
 	if ((intptr_t) vparam != H_EID_VECTOR)
 		return 0;
@@ -104,10 +109,10 @@ int LISPGenMapRegisterOuter::write_callback(const String &s, Element *e, void *v
 	return 0;
 }
 
-void LISPGenMapRegisterOuter::add_handlers() {
+void LISPGenMapRegister::add_handlers() {
 	add_read_handler("eid_vector", read_callback, H_EID_VECTOR, Handler::CALM);
 	add_write_handler("eid_vector", write_callback, H_EID_VECTOR);
 }
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(LISPGenMapRegisterOuter)
+EXPORT_ELEMENT(LISPGenMapRegister)
