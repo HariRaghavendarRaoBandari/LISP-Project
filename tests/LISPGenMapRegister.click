@@ -1,5 +1,5 @@
-LISPGenMapRegister()
--> LISPRecordLocator(10.0.0.3, 192.168.0.10) /* RLOC: 10.0.0.3, EID: 192.168.0.10 */
+LISPGenMapRegister(EID 127.0.0.10, EID 127.0.0.11, EID 127.0.0.12)
+-> LISPRecordLocator(RLOCIPADDR 10.0.0.3)
 -> Print()
 -> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
 -> EnsureEther()

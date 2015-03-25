@@ -10,14 +10,14 @@ CLICK_DECLS
 /*
 =c
 
-LISPGenMapRegisterOuter([EID <ipv4> [, EID <ipv4> ... ] ])
+LISPGenMapRegister([EID <ipv4> [, EID <ipv4> ... ] ])
 
 =s LISPGenMapRegister
 
 Generates the outer common bytes of a MapRegister request.
-When first started, provided EIDs are set as dst_ip_anno in the outgoing
-packet. Then, when a new EID is added using the handler, we repeat the packet
-emission for this particular EID.
+When first started, provided EIDs are set as an annotation (at offset
+LISPStructs USER_ANNO_EID) in the outgoing packet. Then, when a new EID is
+added using the handler, we repeat the packet emission for this particular EID.
 
 =d
 
@@ -32,7 +32,7 @@ The "Authentification Data" field is non-exiting as of now.
 =a
 https://tools.ietf.org/html/rfc6830#page-38
  */
-class LISPGenMapRegisterOuter : public Element {
+class LISPGenMapRegister : public Element {
 	static const uint32_t headroom = sizeof(click_ip) + sizeof(click_udp) + sizeof(click_ether);
 	Vector<int> _ip_vector; // The vector with all EIDs
 	static int write_callback(const String &s, Element *e, void *vparam, ErrorHandler *errh);

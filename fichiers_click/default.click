@@ -9,7 +9,7 @@ RequestEIDMapping :: {
 	};
 
 // Ajouter un timer pour MapRegister
-MapRegister :: LISPGenMapRegister()
+MapRegister :: LISPGenMapRegister(EID 127.0.0.10, EID 127.0.0.11, EID 127.0.0.12)
 	-> LISPRecordLocator(eth0.Addr)
 	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
 	-> EnsureEther()
@@ -39,7 +39,6 @@ c[2] -> Discard; // other
 FromDevice(eth0)
 	-> CheckIPHeader(14)
 	-> IPClassifier(udp port 4341,)
-	-> Strip(42)
 	-> LISPDecap()
 	-> Queue(XXX)
 	-> ToDevice(eth1);
@@ -54,6 +53,7 @@ FromDevice(eth1)
 	-> ToDevice(eth0);
 
 failResolvQueue :: Queue(XXX);
-resolv[1] -> tee :: Tee -> failResolvQueue;
-tee[1] -> Queue(1) -> RequestEIDMapping;
+resolv[1] -> tee :: PullTee;
+tee[1] -> failResolvQueue;
+tee[0] -> RequestEIDMapping;
 failResolvQueue -> resolv;
