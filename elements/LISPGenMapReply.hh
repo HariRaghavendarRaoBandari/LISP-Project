@@ -58,9 +58,9 @@ public:
 	LISPGenMapReply() ;
 	~LISPGenMapReply() ;
 
-	const char *class_name() const { return "LISPGenMapReplyOuter"; }
+	const char *class_name() const { return "LISPGenMapReply"; }
 	const char *port_count() const { return "1/1"; }
-	const char *processing() const { return PULL; }
+	const char *processing() const { return PUSH; }
 
 	void setOuterHeader(LISPMapReply*); // set outer header fixed bytes
 	void setInnerHeader(LISPMapReply*); // set inner header fixed bytes
