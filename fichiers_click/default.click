@@ -10,7 +10,7 @@ RequestEIDMapping :: {
 
 // Ajouter un timer pour MapRegister
 MapRegister :: LISPGenMapRegister()
-	-> LISPRecordLocator(eth0.Addr, EIDADDR) /* EIDADDR a modifier pour avoir une version plus generique */
+	-> LISPRecordLocator(eth0.Addr)
 	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
 	-> EnsureEther()
 	-> ToDevice(eth0);
@@ -21,9 +21,8 @@ FromDevice(eth0) -> CheckIPHeader(14)
 	-> Strip(42)
 	-> c :: LISPClassifier
 	-> Queue(XXX)
-	-> LISPExtractEIDGetRLOC() // le paquet est un Map Request
 	-> LISPGenMapReply()
-	-> LISPRecordLocator(eth0.Addr, EIDADDR) /* EIDADDR a modifier pour avoir une version plus generique */
+	-> LISPRecordLocator(eth0.Addr)
 	-> UDPIPEncap(eth0.Addr, 4342, DST_ANNO, PORT)
 	-> EnsureEther()
 	-> ToDevice(eth0);

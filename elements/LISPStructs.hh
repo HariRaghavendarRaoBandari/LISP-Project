@@ -32,7 +32,7 @@
 /*
  * Define user annotations offsets.
  */
-#define USER_ANNO_EID	0
+#define USER_ANNO_EID	4
 
 
 
