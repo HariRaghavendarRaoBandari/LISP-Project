@@ -1,4 +1,4 @@
-LISPGenMapRegister(EID 127.0.0.10, EID 127.0.0.11, EID 127.0.0.12)
+LISPGenMapRegister(EID 192.168.0.10, EID 192.168.0.11)
 -> LISPRecordLocator(RLOCIPADDR 10.0.0.3)
 -> Print()
 -> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
