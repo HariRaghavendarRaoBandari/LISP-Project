@@ -2,7 +2,7 @@
 // (internet) < --[ eth0 ]----[ eth1 ]-- > (LAN)
 RequestEIDMapping :: {
 	input -> GetIPAddress(XXX)
-	-> LISPGenMapRequest(IPADDR) /* IPADDR: adresse routabledu xTR */
+	-> LISPGenMapRequest(ITRADDR) /* ITRADDR: adresse routabledu ITR */
 	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
 	-> EnsureEther()
 	-> ToDevice(eth0)

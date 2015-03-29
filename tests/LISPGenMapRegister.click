@@ -1,6 +1,6 @@
 LISPGenMapRegister()
--> LISPRecordLocator(192.168.0.2, 192.168.100.200) /* RLOC: 192.168.0.2, EID: 192.168.100.200 */
+-> LISPRecordLocator(10.0.0.3, 192.168.0.10) /* RLOC: 10.0.0.3, EID: 192.168.0.10 */
 -> Print()
--> UDPIPEncap(127.0.0.1, 1234, 127.0.0.1, 5678)
+-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
 -> EnsureEther()
--> ToDevice(lo);
+-> ToDump(map_registers.pcap);

@@ -1,7 +1,7 @@
-InfiniteSource(LIMIT 1, LENGTH 28)
--> SetIPAddress(4.3.2.1) /* Sets the IPv4 address in annotations */
--> LISPGenMapRequest(5.6.7.8)
+InfiniteSource(LIMIT 1, LENGTH 28, STOP 1)
+-> SetIPAddress(192.168.1.20)
+-> LISPGenMapRequest(10.0.0.3)
 -> Print()
--> UDPIPEncap(127.0.0.1, 1234, 127.0.0.1, 5678)
+-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
 -> EnsureEther()
--> ToDump(req.pcap);
+-> ToDump(map_request.pcap);
