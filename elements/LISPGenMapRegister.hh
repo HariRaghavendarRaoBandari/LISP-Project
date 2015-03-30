@@ -39,8 +39,8 @@ class LISPGenMapRegister : public Element {
 	static String read_callback(Element *e, void *vparam);
 
 	public:
-		LISPGenMapRegister() CLICK_COLD;
-		~LISPGenMapRegister() CLICK_COLD;
+		LISPGenMapRegister() ; //CLICK_COLD
+		~LISPGenMapRegister() ; //CLICK_COLD
 
 		const char *class_name() const { return "LISPGenMapRegister"; }
 		const char *port_count() const { return "0/1"; }
