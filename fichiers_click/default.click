@@ -1,22 +1,7 @@
-// Coté xTR
-// (internet) < --[ eth0 ]----[ eth1 ]-- > (LAN)
-RequestEIDMapping :: {
-	input -> GetIPAddress(XXX)
-	-> LISPGenMapRequest(ITRADDR) /* ITRADDR: adresse routabledu ITR */
-	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
-	-> EnsureEther()
-	-> ToDevice(eth0)
-	};
 
-// Ajouter un timer pour MapRegister
-MapRegister :: LISPGenMapRegister(EID 127.0.0.10, EID 127.0.0.11, EID 127.0.0.12)
-	-> LISPRecordLocator(eth0.Addr)
-	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
-	-> EnsureEther()
-	-> ToDevice(eth0);
-
-// Côté MSMR (une seule interface: eth0)
-FromDevice(eth0) -> CheckIPHeader(14)
+MSMR :: {
+	FromDevice(eth0)
+	-> CheckIPHeader(14)
 	-> IPClassifier(udp port 4342,)
 	-> Strip(42)
 	-> c :: LISPClassifier
@@ -27,33 +12,62 @@ FromDevice(eth0) -> CheckIPHeader(14)
 	-> EnsureEther()
 	-> ToDevice(eth0);
 
-c[1] -> LISPExtractEIDAndUpdateDB(); // le paquet est un Map Register
+	c[1] -> LISPExtractEIDAndUpdateDB(); // le paquet est un Map Register
+	c[2] -> Discard; // other
+};
 
-c[2] -> Discard; // other
-
-/*
+/******************************************
+ * xTR
+ * eth0 addr: 10.0.0.3
+ * eth1 addr: 192.168.0.1
  * (internet) < --[ eth0 ]----[ eth1 ]-- > (LAN)
- */
+ ******************************************/
 
-// Décapsulation d’un paquet
-FromDevice(eth0)
-	-> CheckIPHeader(14)
-	-> IPClassifier(udp port 4341,)
-	-> LISPDecap()
-	-> Queue(XXX)
-	-> ToDevice(eth1);
-
-// Encapsulation d’un paquet
-FromDevice(eth1)
-	-> CheckIPHeader(14)
-	-> LISPUDPIPEncap()
-	-> Queue(XXX)
-	-> resolv :: LISPResolv
+EIDRegistration :: {
+	LISPGenMapRegister(EID 192.168.0.10, EID 192.168.0.11)
+	-> LISPRecordLocator(RLOCIPADDR 10.0.0.3)
+	-> Print()
+	-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
 	-> EnsureEther()
 	-> ToDevice(eth0);
+};
 
-failResolvQueue :: Queue(XXX);
-resolv[1] -> tee :: PullTee;
-tee[1] -> failResolvQueue;
-tee[0] -> RequestEIDMapping;
-failResolvQueue -> resolv;
+/*
+ * Décapsulation d’un paquet / Ingress Tunnel Router
+ */
+ITR :: {
+	FromDevice(eth0)
+	-> CheckIPHeader(14)
+	-> IPClassifier(udp port 4341,)
+	-> LISPDecapsulation()
+	-> Queue(XXX)
+	-> ToDevice(eth1);
+};
+
+/*
+ * Encapsulation d’un paquet / Egress Tunnel Router
+ */
+
+ETR :: {
+	tee :: Tee(2);
+	
+	tee[1] -> LISPPrintDB(RLOC 10.0.0.4) -> Queue(10) -> RequestEIDMapping :: {
+		input
+		-> LISPGenMapRequest(10.0.0.3)
+		-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
+		-> EnsureEther()
+		-> ToDump(resolv_map_requested.pcap);
+	};
+
+	FromDevice(eth1)
+		-> CheckIPHeader(14)
+		-> LISPEncapsulation(SRC 192.168.0.10, SPORT 1234)
+		-> resolv :: LISPResolv
+		-> Queue(10)
+		-> SetIPChecksum
+		-> EnsureEther
+		-> ToDevice(eth0);
+
+	resolv[1] -> tee;
+	tee[0] -> failedResolvQueue :: Queue(10) -> TimedUnqueue(INTERVAL 5) -> resolv;
+};
