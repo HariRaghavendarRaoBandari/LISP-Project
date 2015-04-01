@@ -298,8 +298,8 @@ struct LISPMapReply {
 	struct LISPMapReplyOuterHeader oh;
 	uint32_t nonce1;
 	uint32_t nonce2;
-	struct LISPLocatorHeader loc;
 	struct LISPRecordLocatorHeader rec;
+	struct LISPLocatorHeader loc;
 } CLICK_SIZE_PACKED_ATTRIBUTE;
 
 #endif
