@@ -1,6 +1,6 @@
-LISPGenMapRegister(EID 127.0.0.10, EID 127.0.0.11, EID 127.0.0.12)
--> LISPRecordLocator(RLOCIPADDR 127.0.0.1)
+LISPGenMapRegister(EID 192.168.0.10, EID 192.168.0.11)
+-> LISPRecordLocator(RLOCIPADDR 10.0.0.3)
 -> Print()
--> UDPIPEncap(127.0.0.1, 1234, 127.0.0.111, 4342) /* @ MSMR = 127.0.0.111,*/
+-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
 -> EnsureEther()
--> ToDevice(lo);
+-> ToDump(map_registers.pcap);

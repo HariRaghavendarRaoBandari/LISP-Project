@@ -2,7 +2,7 @@
 // (internet) < --[ eth0 ]----[ eth1 ]-- > (LAN)
 RequestEIDMapping :: {
 	input -> GetIPAddress(XXX)
-	-> LISPGenMapRequest(IPADDR) /* IPADDR: adresse routabledu xTR */
+	-> LISPGenMapRequest(ITRADDR) /* ITRADDR: adresse routabledu ITR */
 	-> UDPIPEncap(eth0.Addr, RANDOM, MSMR.Addr, 4342)
 	-> EnsureEther()
 	-> ToDevice(eth0)
@@ -53,6 +53,7 @@ FromDevice(eth1)
 	-> ToDevice(eth0);
 
 failResolvQueue :: Queue(XXX);
-resolv[1] -> tee :: Tee -> failResolvQueue;
-tee[1] -> Queue(1) -> RequestEIDMapping;
+resolv[1] -> tee :: PullTee;
+tee[1] -> failResolvQueue;
+tee[0] -> RequestEIDMapping;
 failResolvQueue -> resolv;
