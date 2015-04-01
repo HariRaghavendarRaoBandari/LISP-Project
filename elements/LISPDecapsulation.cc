@@ -7,14 +7,13 @@
 CLICK_DECLS
 
 LISPDecapsulation::LISPDecapsulation() { }
-   
+ 
 LISPDecapsulation::~LISPDecapsulation() { }
-
 
 Packet* LISPDecapsulation::simple_action(Packet *p_in)
 {
 	click_ip* outer_ip = (click_ip *)(p_in->data());
-	
+
 	struct LISPHeader * lisp = (struct LISPHeader *)(p_in->data() + sizeof(click_ip) + sizeof(click_udp) );
 
 	click_ip * inner_ip = (click_ip *)(p_in->data() + sizeof(click_ip) + sizeof(click_udp) + sizeof(struct LISPHeader));
@@ -38,7 +37,6 @@ Packet* LISPDecapsulation::simple_action(Packet *p_in)
 	p_in->set_dst_ip_anno(inner_ip->ip_dst);
 	return p_in;
 }
-
 
 CLICK_ENDDECLS
 EXPORT_ELEMENT(LISPDecapsulation)
