@@ -17,7 +17,8 @@ int LISPGenMapRequest::configure(Vector<String> &conf, ErrorHandler *errh) {
 	return 0;
 }
 
-Packet* LISPGenMapRequest::simple_action(Packet *p) {
+Packet* LISPGenMapRequest::simple_action(Packet *inP) {
+	WritablePacket *p = inP->uniqueify();
 
 	// Adjust the length of the packet data buffer
 	if (p->length() < proper_size) // "increase"

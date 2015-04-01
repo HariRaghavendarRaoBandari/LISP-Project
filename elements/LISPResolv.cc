@@ -36,7 +36,7 @@ void LISPResolv::run_timer(Timer *t) {
 	if (_eid_cache.empty())
 		return;
 
-	click_chatter("@{%s} EID cache:\n", __PRETTY_FUNCTION__);
+	click_chatter("@LISPResolv EID cache:\n");
 
 	// Print & modify the cache
 	for (HashTable<uint32_t, int>::iterator it = _eid_cache.begin(); it ; it++) {
@@ -60,8 +60,8 @@ Packet *LISPResolv::simple_action(Packet *p) {
 	IPAddress a = IPAddress(getRLOCFromEID(eid));
 
 	if (a.empty()) {
-		click_chatter("@{%s}: failed resolv -> output 1\n", __PRETTY_FUNCTION__);
-		p->set_dst_ip_anno(a.addr());
+		click_chatter("Resolv failed -> output 1\n");
+		p->set_dst_ip_anno(eid);
 
 		if (noutputs() == 2)
 			output(1).push(p);
@@ -70,7 +70,7 @@ Packet *LISPResolv::simple_action(Packet *p) {
 
 		return NULL;
 	} else
-		click_chatter("@{%s}: resovl succeeded -> output 0\n", __PRETTY_FUNCTION__);
+		click_chatter("Resovl succeeded -> output 0\n");
 
 	p->set_dst_ip_anno(a);
 	ip_oh->ip_dst = a;
