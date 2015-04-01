@@ -21,7 +21,7 @@ public:
 	const char *port_count() const { return "1/3"; }
 	const char *processing() const { return AGNOSTIC; }
 
-	Packet* simple_action(int, Packet*);
+	Packet* simple_action(Packet*);
 };
 
 CLICK_ENDDECLS

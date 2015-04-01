@@ -1,7 +1,6 @@
 #include <click/config.h>
 #include "LISPClassifier.hh"
 #include "LISPStructs.hh"
-//#include stuff.h
 
 CLICK_DECLS
 
@@ -39,11 +38,10 @@ inline bool check_register(const void* buf, uint32_t len) {
 	&& reg->Record_Count == 1
 	&& reg->Key_Id == KEY_ID_HMAC_SHA_1_96
 	&& reg->Authentication_Data_Length == htons(4)
-	&& reg->Authentication_Data == 0	// TODO Remove if auth used!
 	;
 }
 
-Packet* LISPClassifier::simple_action(int, Packet* p) {
+Packet* LISPClassifier::simple_action(Packet* p) {
 	const unsigned char* buf = p->data();
 	uint32_t len = p->length();
 	
