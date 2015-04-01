@@ -49,10 +49,10 @@ Packet* LISPEncapsulation::simple_action(Packet *p){
 
 	p = p->push(sizeof(struct LISPHeader)); // On agrandit le header de la taille de la structure LISPHeader
 
-	struct LISPHeader *lh = (struct LISPHeader*) p->data(); // Notre pointeur inner_ip pointe desormais sur le début de notre structure LISPHeader
+	struct LISPHeader *lh = (struct LISPHeader*) p->data(); // Le pointeur lh pointe sur le début de notre structure LISPHeader
 
 
-	// Initialisation des valeurs pour LISP
+	// Initialisation des valeurs pour LISP : Toutes les valeurs sont mise à 0 par defaut
 	lh->N = 0;
 	lh->L = 0;
 	lh->E = 0;
@@ -68,10 +68,10 @@ Packet* LISPEncapsulation::simple_action(Packet *p){
 	lh->secondLine = 0;
 
 	// Initialisation des valeurs pour OUTERHEADER UDPIP
-	
-	p = p->push(sizeof(click_udp) + sizeof(click_ip));
-	click_ip *ip = (click_ip *)(p->data());
-	click_udp *udp = (click_udp *)(ip + 1);
+
+	p = p->push(sizeof(click_udp) + sizeof(click_ip)); // On agrandit le header de la taille d'un entête UDP/IP
+	click_ip *ip = (click_ip *)(p->data()); // Pointeur click_ip sur l'entête IP de l'outerheader
+	click_udp *udp = (click_udp *)(ip + 1); // Pointeur click_udp sur l'entête UDP de l'outerheader
 
 	#if !HAVE_INDIFFERENT_ALIGNMENT
 	assert((uintptr_t)ip % 4 == 0);
@@ -80,11 +80,11 @@ Packet* LISPEncapsulation::simple_action(Packet *p){
 	// set up IP header
 	ip->ip_v = 4;
 	ip->ip_hl = sizeof(click_ip) >> 2;
-	ip->ip_len = htonl(p->length());
 	ip->ip_id = inner_ip->ip_id;
 	ip->ip_p = 17; // Num Protocole UDP = 17
 	ip->ip_src = _saddr;
-	ip->ip_dst = p->dst_ip_anno(); // Ajout de l'annotation
+	ip->ip_len = htons(p->length());
+	ip->ip_dst = p->dst_ip_anno(); // Ajout de la destination de l'annotation
 	p->set_dst_ip_anno(inner_ip->ip_dst);
 
 	ip->ip_tos = inner_ip->ip_tos; // On récupère la valeur du paquet encapsulé
