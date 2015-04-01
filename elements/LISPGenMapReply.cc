@@ -59,12 +59,14 @@ Packet* LISPGenMapReply::simple_action(Packet* inP) {
 	WritablePacket *outP = Packet::make(sizeof(LISPMapReply));
 
 	LISPMapReply *reply = (LISPMapReply*) outP->data();
-	LISPMapRequest *request = (LISPMapRequest*) inP->uniqueify()->data();
+	LISPMapRequest *request = (LISPMapRequest*) inP->data();
+
+	click_chatter("EID_Prefix = %X\n", request->EID_prefix);
 
 	reply->rec.EID_Prefix = request->EID_prefix;
 	// TODO call prefix-check
 
-	unsigned int locator = htonl(getRLOCFromEID(request->EID_prefix));
+	unsigned int locator = getRLOCFromEID(request->EID_prefix);
 	reply->rec.Locator_Count = (locator == 0) ? 0 : 1;
 	reply->loc.Locator = locator;
 
