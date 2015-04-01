@@ -43,8 +43,7 @@ inline bool check_register(const void* buf, uint32_t len) {
 	;
 }
 
-void LISPClassifier::push(int, Packet* p) {
-
+Packet* LISPClassifier::simple_action(int, Packet* p) {
 	const unsigned char* buf = p->data();
 	uint32_t len = p->length();
 	
@@ -61,6 +60,7 @@ void LISPClassifier::push(int, Packet* p) {
 //	#endif
 
 	output(outport).push(p);
+	return NULL;
 }
 
 EXPORT_ELEMENT(LISPClassifier)

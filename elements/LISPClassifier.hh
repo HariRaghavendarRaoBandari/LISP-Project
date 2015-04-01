@@ -19,9 +19,9 @@ public:
 
 	const char *class_name() const { return "LISPClassifier"; }
 	const char *port_count() const { return "1/3"; }
-	const char *processing() const { return PUSH; }
+	const char *processing() const { return AGNOSTIC; }
 
-	void push(int, Packet*);
+	Packet* simple_action(int, Packet*);
 };
 
 CLICK_ENDDECLS
