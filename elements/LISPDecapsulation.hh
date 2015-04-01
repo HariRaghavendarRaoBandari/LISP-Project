@@ -2,7 +2,13 @@
 #define CLICK_LISPDECAPSULATION_HH
 #include <click/element.hh>
 CLICK_DECLS
-
+/*
+ * LISPDecapsulation
+ *
+ * Retire les entêtes UDP/IP de l'outerheader ainsi que l'entête LISP
+ * S'assure que les champs du header LISP sont toujours à 0
+ * Copie du Time-to-live et Type-of-service de l'outerheader vers l'innerheader
+ */
 
 class LISPDecapsulation : public Element {
 

@@ -6,11 +6,13 @@
 
 CLICK_DECLS
 /*
- * LISPEncapsulation
+ * LISPEncapsulation(IP_Source, Port_Source)
  * 
- * Ajoute l'entête LISP et met tout les bits à 0
- * (Bit de statut, flags, Nonce etc...)
- *  
+ * Ajoute l'entête LISP et UDP/IP
+ * Met les bits de l'entête LISP à 0 (Bit de statut, flags, Nonce etc...)
+ * Encapsule en UDP/IP vers le port 4341 de l'IP se trouvant dans l'annotation
+ * Copie du Time-to-live et Type-of-service de l'innerheader vers l'outerheader
+ * Ne conserve pas les checksums
  */
 
 class LISPEncapsulation : public Element {
