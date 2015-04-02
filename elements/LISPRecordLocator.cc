@@ -1,5 +1,4 @@
 #include <click/config.h>
-#include <click/glue.hh> // TODO remove
 #include "LISPRecordLocator.hh"
 #include "LISPStructs.hh"
 
@@ -20,8 +19,6 @@ Packet* LISPRecordLocator::simple_action(Packet *p) {
 
 	LISPMapRegister *mr = (LISPMapRegister *) (p->data());
 
-	//click_chatter("anno @ USER_ANNO_EID: %s", IPAddress(p->anno_u32(USER_ANNO_EID)).s().c_str());
-
 	// Modify options below
 	mr->rec.Record_TTL = htonl(1);
 	mr->rec.Locator_Count = 1; // Only 1 locator
@@ -35,6 +32,7 @@ Packet* LISPRecordLocator::simple_action(Packet *p) {
 	mr->rec.Map_Version2 = 0;
 	mr->rec.EID_Prefix_AFI = AFI_IPV4;
 	mr->rec.EID_Prefix = p->anno_u32(USER_ANNO_EID);
+
 	mr->loc.Priority = 0; // RLOC priorities for unicast [0, 255] (255 = do not use RLOC to forward multicast)
 	mr->loc.Weight = 0; // all weight are set to 0, a simple hash algorithm will be used to balance the load
 	mr->loc.M_Priority = 0; // We _don't_ do multicast

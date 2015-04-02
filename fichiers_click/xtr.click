@@ -1,21 +1,3 @@
-
-MSMR :: {
-	FromDevice(eth0)
-	-> CheckIPHeader(14)
-	-> IPClassifier(udp port 4342,)
-	-> Strip(42)
-	-> c :: LISPClassifier
-	-> Queue(XXX)
-	-> LISPGenMapReply()
-	-> LISPRecordLocator(eth0.Addr)
-	-> UDPIPEncap(eth0.Addr, 4342, DST_ANNO, PORT)
-	-> EnsureEther()
-	-> ToDevice(eth0);
-
-	c[1] -> LISPExtractEIDAndUpdateDB(); // le paquet est un Map Register
-	c[2] -> Discard; // other
-};
-
 /******************************************
  * xTR
  * eth0 addr: 10.0.0.3
@@ -26,7 +8,6 @@ MSMR :: {
 EIDRegistration :: {
 	LISPGenMapRegister(EID 192.168.0.10, EID 192.168.0.11)
 	-> LISPRecordLocator(RLOCIPADDR 10.0.0.3)
-	-> Print()
 	-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
 	-> EnsureEther()
 	-> ToDevice(eth0);
@@ -53,10 +34,10 @@ ETR :: {
 	
 	tee[1] -> LISPPrintDB(RLOC 10.0.0.4) -> Queue(10) -> RequestEIDMapping :: {
 		input
-		-> LISPGenMapRequest(10.0.0.3)
+		-> LISPGenMapRequest(ITRADDR 10.0.0.3)
 		-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)
 		-> EnsureEther()
-		-> ToDump(resolv_map_requested.pcap);
+		-> ToDevice(eth0);
 	};
 
 	FromDevice(eth1)
