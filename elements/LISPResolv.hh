@@ -10,7 +10,7 @@ CLICK_DECLS
 /*
 =c
 
-LISPResolv()
+LISPResolv([MAXTTL], [MAXFAILEDRESOLV])
 
 =s LISPResolv
 
@@ -36,13 +36,18 @@ is removed from the Database. This method is used to re-request a RLOC for the
 destination EID, it's usefull if the destination move. The max TTL is 5 by
 default but can be configured with the MAXTTL keyword.
 
+MAXFAILEDRESOLV (default is 5) indicates the maximum number of times a packet
+will pass through the resolv process. The packet is dropped if this maximum is
+exceeded.  To control how many times a packet failed the resolv process we use
+a uint8_t in the packet annotation at offset RESOLV_COUNTER_OFFSET.
+
 =a LISPDB
 */
 
 class LISPResolv : public Element {
 	HashTable<uint32_t, int> _eid_cache;
 	Timer _timer;
-	int _max_cache_ttl;
+	unsigned int _max_cache_ttl, max_failed_resolv;
 
 	void run_timer(Timer *t);
 public:

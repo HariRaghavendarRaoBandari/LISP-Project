@@ -30,10 +30,10 @@
 #define AFI_IPV6 htons(2)
 
 /*
- * Define user annotations offsets.
+ * Define user annotations offsets (in bytes).
  */
-#define USER_ANNO_EID	4
-
+#define USER_ANNO_EID		4
+#define RESOLV_COUNTER_OFFSET	5
 
 
 struct LISPLocatorHeader {

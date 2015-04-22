@@ -12,6 +12,7 @@ InfiniteSource(LIMIT 1)
 -> UDPIPEncap(192.168.0.10, 1234, 192.168.1.20, 4444)
 -> SetIPAddress(192.168.0.10)
 -> LISPEncapsulation(SRC 192.168.0.10, SPORT 1234)
+-> Paint(COLOR 0, ANNO 5) /* Makes sure that the failed resolv counter is 0 at user annotation offset 5 */
 -> resolv :: LISPResolv
 -> SetIPChecksum
 -> EnsureEther

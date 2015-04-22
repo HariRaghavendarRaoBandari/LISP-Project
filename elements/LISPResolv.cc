@@ -5,17 +5,21 @@
 #include <click/args.hh>
 #include "LISPResolv.hh"
 #include "LISPDB.hh"
+#include "LISPStructs.hh" // for RESOLV_COUNTER_OFFSET
 
 CLICK_DECLS
 
-LISPResolv::LISPResolv() : _timer((Element *) this) {
-	_max_cache_ttl = 5;
-}
+LISPResolv::LISPResolv() : _timer((Element *) this) { }
 
 LISPResolv::~LISPResolv() { }
 
 int LISPResolv::configure(Vector<String> &conf, ErrorHandler *errh) {
-	if (Args(conf, this, errh).read("MAXTTL", _max_cache_ttl).complete() < 0)
+	int res = Args(conf, this, errh)
+		.read_or_set("MAXTTL", _max_cache_ttl, 5)
+		.read_or_set("MAXFAILEDRESOLV", max_failed_resolv, 5)
+		.complete();
+
+	if (res < 0)
 		return -1;
 
 	return 0;
@@ -60,13 +64,17 @@ Packet *LISPResolv::simple_action(Packet *p) {
 	IPAddress a = IPAddress(getRLOCFromEID(eid));
 
 	if (a.empty()) {
-		click_chatter("Resolv failed -> output 1\n");
+		click_chatter("Resolv failed -> output 1 (if connected)\n");
 		p->set_dst_ip_anno(eid);
+		uint8_t failed_resolv = p->anno_u8(RESOLV_COUNTER_OFFSET);
+		p->set_anno_u8(RESOLV_COUNTER_OFFSET, ++failed_resolv);
 
-		if (noutputs() == 2)
+		if (noutputs() == 2 && failed_resolv < max_failed_resolv)
 			output(1).push(p);
-		else
+		else {
+			click_chatter("\toutput 1 not connected or max_failed_resolv is reached\n");
 			p->kill();
+		}
 
 		return NULL;
 	} else
