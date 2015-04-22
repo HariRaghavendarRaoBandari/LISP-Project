@@ -1,6 +1,6 @@
-failedResolvQueue :: Queue(10);
+failedResolvQueue :: Queue;
 
-tee :: Tee(2) -> LISPPrintDB(RLOC 10.0.0.4) -> Queue(10) -> RequestEIDMapping :: {
+tee :: Tee(2) -> LISPPrintDB(RLOC 10.0.0.4) -> Queue -> RequestEIDMapping :: {
 	input
 	-> LISPGenMapRequest(10.0.0.3)
 	-> UDPIPEncap(10.0.0.3, 1234, 10.0.0.2, 4342)

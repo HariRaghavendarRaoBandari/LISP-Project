@@ -6,13 +6,14 @@
 
 CLICK_DECLS
 /*
- * LISPEncapsulation(IP_Source, Port_Source)
+ * LISPEncapsulation(SRC, SPORT)
  * 
- * Ajoute l'entête LISP et UDP/IP
+ * Ajoute l'entête LISP et UDP/IP externe.
  * Met les bits de l'entête LISP à 0 (Bit de statut, flags, Nonce etc...)
  * Encapsule en UDP/IP vers le port 4341 de l'IP se trouvant dans l'annotation
  * Copie du Time-to-live et Type-of-service de l'innerheader vers l'outerheader
- * Ne conserve pas les checksums
+ * Ne conserve pas les checksums.
+ * SRC réfère au RLOC du xTR qui réalise l'encapsulation.
  */
 
 class LISPEncapsulation : public Element {
