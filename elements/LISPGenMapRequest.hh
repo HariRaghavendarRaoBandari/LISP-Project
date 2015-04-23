@@ -49,7 +49,7 @@ class LISPGenMapRequest : public Element {
 	 * This is the size a Map Request will have (Map_Reply_Record field
 	 * exluded).
 	 */
-	static const uint32_t proper_size = sizeof(LISPMapRequest) - sizeof(uint32_t);
+	static const uint32_t proper_size = sizeof(LISPMapRequest);
 	IPAddress _ip;
 
 	public:
