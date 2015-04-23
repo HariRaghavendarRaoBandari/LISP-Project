@@ -33,7 +33,7 @@ starting after the authentication_data bytes to the end of the paquet.
 Map-Reply).
 "Loc-AFI" is fixed to AFI_IPV4 (1).
 
-RLOCIPADDR must be specified as a valid IPv4 addresse.
+RLOCIPADDR must be specified as a valid IPv4 address.
 
 =a
 https://tools.ietf.org/html/rfc6830#section-6.1.4
