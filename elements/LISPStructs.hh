@@ -260,7 +260,7 @@ struct LISPMapRequest {
 	unsigned int EID_mask_len : 8;
 	unsigned int EID_prefix_AFI : 16;
 	unsigned int EID_prefix : 32;
-	unsigned int Map_Reply_Record : 32; // Unused in a "pure" Map-Request
+	//unsigned int Map_Reply_Record : 32; // Unused in a "pure" Map-Request
 #else
 #error "Only little endian is supported"
 #endif

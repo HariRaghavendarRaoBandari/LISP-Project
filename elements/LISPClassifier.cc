@@ -36,30 +36,24 @@ inline bool check_register(const void* buf, uint32_t len) {
 	&& reg->P == 0
 	&& reg->M == 0
 	&& reg->Record_Count == 1
-	&& reg->Key_Id == KEY_ID_HMAC_SHA_1_96
-	&& reg->Authentication_Data_Length == htons(4)
+	&& reg->Key_Id == KEY_ID_NONE
+	&& reg->Authentication_Data_Length == 0
 	;
 }
 
-Packet* LISPClassifier::simple_action(Packet* p) {
+void LISPClassifier::push(int, Packet* p) {
 	const unsigned char* buf = p->data();
 	uint32_t len = p->length();
 	
 	short outport = LISP_CL_INVALID;
 
-	if( check_request(buf,len) ) {
+	if (check_request(buf, len))
 		outport = LISP_CL_REQUEST;
-	} else if( check_register(buf,len) ) {
+	else if (check_register(buf, len))
 		outport = LISP_CL_REGISTER;
-	}
 
-	//#ifdef DEBUG
 	click_chatter("Function %s, outport: %d", __PRETTY_FUNCTION__, outport);
-//	#endif
-
 	output(outport).push(p);
-	return NULL;
 }
 
 EXPORT_ELEMENT(LISPClassifier)
-
