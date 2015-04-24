@@ -13,29 +13,38 @@ define($MSMRIP 10.0.0.2);
 define($CLIENTEID 192.168.0.10);
 define($SERVEREID 192.168.0.20);
 
+q1 :: Queue;
+
 EIDRegistration :: {
 	LISPGenMapRegister(EID 192.168.1.20)
 	-> LISPRecordLocator(RLOCIPADDR $RLOCIP)
 	-> UDPIPEncap($RLOCIP, 1234, $MSMRIP, 4342)
-	-> EnsureEther()
-	-> ToDevice(eth0);
-};
+	-> EnsureEther
+	-> Unqueue
+	-> output;
+} -> q1;
 
 /*
  * Décapsulation d’un paquet / Ingress Tunnel Router
  */
 ITR :: {
-	FromDevice(eth0)
+	FromDevice(eth0, FORCE_IP true)
 	-> CheckIPHeader(14)
 	-> IPClassifier(udp port 4341,)
 	-> LISPDecapsulation()
-	-> Queue
-	-> ToDevice(eth1);
-};
+	-> EtherEncap(0x0800, 1:1:1:1:1:1, 2:2:2:2:2:2)
+	-> output;
+} -> q1;
+
+q1
+//-> SetUDPChecksum
+//-> SetIPChecksum
+-> ToDevice(eth0);
 
 /*
  * Encapsulation d’un paquet / Egress Tunnel Router
  */
+
 /*
 ETR :: {
 	tee :: Tee(2);

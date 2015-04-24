@@ -62,13 +62,6 @@ Packet* LISPEncapsulation::simple_action(Packet *p){
 
 	lh->flags = 0;
 
-	/*
-	lh->firstLine_1 = 0;
-	lh->firstLine_2 = 0;
-	lh->firstLine_3 = 0;
-	lh->secondLine = 0;
-	*/
-
 	// Initialisation des valeurs pour OUTERHEADER UDPIP
 
 	p = p->push(sizeof(click_udp) + sizeof(click_ip)); // On agrandit le header de la taille d'un entête UDP/IP
