@@ -24,10 +24,12 @@ Packet* LISPDecapsulation::simple_action(Packet *p_in)
 	assert(lisp->V == 0);
 	assert(lisp->I == 0);
 	assert(lisp->flags == 0);
+	/*
 	assert(lisp->firstLine_1 == 0);
 	assert(lisp->firstLine_2 == 0);
 	assert(lisp->firstLine_3 == 0);
 	assert(lisp->secondLine == 0);
+	*/
 
 	inner_ip->ip_tos = outer_ip->ip_tos;
 	inner_ip->ip_ttl = outer_ip->ip_ttl;

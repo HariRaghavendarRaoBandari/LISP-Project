@@ -25,7 +25,7 @@ int LISPResolv::configure(Vector<String> &conf, ErrorHandler *errh) {
 	return 0;
 }
 
-int LISPResolv::initialize(ErrorHandler *e) {
+int LISPResolv::initialize(ErrorHandler *) {
 	_timer.initialize((Element *) this);
 	_timer.schedule_now();
 

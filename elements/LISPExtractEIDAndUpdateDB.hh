@@ -6,6 +6,7 @@
 CLICK_DECLS
 
 class LISPExtractEIDAndUpdateDB : public Element {
+	bool _is_reply;
 
 public:
 
@@ -18,7 +19,7 @@ public:
 
 	void debug();
 	Packet* simple_action(Packet *p);
-
+	int configure(Vector<String> &conf, ErrorHandler *errh);
 };
 
 CLICK_ENDDECLS

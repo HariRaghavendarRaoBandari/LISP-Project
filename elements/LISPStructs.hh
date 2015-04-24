@@ -143,11 +143,12 @@ struct LISPHeader {
     unsigned int N : 1; // Nonce-bit : Quand = 1 les 24 bits de poids faible des 32 premiers bits contiennent un Nonce
  
 
+	/*
 	unsigned int firstLine_1 : 8; // 24 bits de poids faible des 32 premiers bits du header LISP. Peuvent être Nonce ou Map-Version
 	unsigned int firstLine_2 : 8;
 	unsigned int firstLine_3 : 8;
 	unsigned int secondLine : 32; // 32 seconds bits du header LISP. Peuvent être Instance ID ou Locator-Status-Bits
-
+	*/
 #else
 #error "Only little endian is supported"
 #endif
