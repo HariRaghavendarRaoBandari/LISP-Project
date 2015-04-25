@@ -1,3 +1,5 @@
+require(lisp);
+
 FromDump(map_request.pcap)
 -> Strip(42)
 -> LISPGenMapReply()

@@ -1,3 +1,5 @@
+require(lisp);
+
 failedResolvQueue :: Queue;
 
 tee :: Tee(2) -> LISPPrintDB(RLOC 10.0.0.4) -> Queue -> RequestEIDMapping :: {

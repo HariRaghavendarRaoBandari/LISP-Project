@@ -1,0 +1,13 @@
+Click __doit__ ^etre installé sur le système!
+
+Pour utiliser le package lisp il est nécessaire d'exécuter dans lisp-package:
+
+Compilation:
+
+	$ autoreconf
+	$ ./configure [--disable-linuxmodule, --disable-bsdmodule, --disable-userlevel] [--with-click=/path/to/install/click]
+	# make install
+
+Ajouter la ligne aux fichiers de configuration .click:
+
+	require(lisp);

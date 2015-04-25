@@ -1,3 +1,5 @@
+require(lisp);
+
 MSMR :: {
 	FromDevice(enp2s0)
 	-> CheckIPHeader(14)
