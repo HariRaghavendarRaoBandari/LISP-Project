@@ -1,3 +1,5 @@
+require(lisp);
+
 MSMR :: {
 	define($IFACENAME enp2s0);
 	AddressInfo($IFACENAME 10.0.0.2 5c:f9:dd:4e:5f:81);

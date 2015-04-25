@@ -1,3 +1,5 @@
+require(lisp);
+
 InfiniteSource(LIMIT 1, LENGTH 28, STOP 1)
 -> SetIPAddress(192.168.1.20)
 -> LISPGenMapRequest(10.0.0.3)

@@ -8,6 +8,8 @@
  * "Reseau de destination" 192.168.1.1
  ******************************************/
 
+require(lisp);
+
 define($RLOCIP 10.0.0.4);
 define($MSMRIP 10.0.0.2);
 define($CLIENTEID 192.168.0.10);
