@@ -91,8 +91,7 @@ Packet* LISPEncapsulation::simple_action(Packet *p){
 	// set up UDP header
 	udp->uh_sport = _sport;
 	udp->uh_dport = (uint16_t) htons(4341);
-	uint16_t len = p->length() - sizeof(click_ip);
-	udp->uh_ulen = htons(len);
+	udp->uh_ulen = htons(p->length() - sizeof(click_ip));
 	udp->uh_sum = 0;
 
 	return p;

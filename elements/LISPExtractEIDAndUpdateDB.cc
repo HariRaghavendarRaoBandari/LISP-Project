@@ -61,9 +61,7 @@ Packet* LISPExtractEIDAndUpdateDB::simple_action(Packet *inP)
 
 		click_chatter("[*] Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
 		setEIDToRLOC(regis->rec.EID_Prefix, regis->loc.Locator);
-
-	} else
-		click_chatter("else");
+	}
 
 	inP->kill();
 	return NULL;
