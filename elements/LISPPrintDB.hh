@@ -14,8 +14,13 @@ LISPPrintDB(RLOC)
 
 Print the Database when a packet cross this element.
 
+=d
+
 RLOC is the RLOC IP address, only of use if you want to add mappings in the
 database using handlers, see write_callback() for more details.
+
+This is used for testing purposes.
+You can add a mapping by providing a EID to the "MAP" handler, only one EID at a time.
 
 =a LISPDB
  */

@@ -5,6 +5,15 @@
 
 CLICK_DECLS
 
+/*
+=c
+
+LISPExtractEIDAndUpdateDB(IS_REPLY <true|false>)
+
+=s LISPExtractEIDAndUpdateDB
+
+Extracts a EID and a RLOC from a Map-Reply and Map-Register, update the EID -> RLOC mapping in LISPDB.
+ */
 class LISPExtractEIDAndUpdateDB : public Element {
 	bool _is_reply;
 
