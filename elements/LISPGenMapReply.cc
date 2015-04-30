@@ -80,6 +80,8 @@ Packet* LISPGenMapReply::simple_action(Packet* inP) {
 
 	setLocator(reply);
 
+	outP->set_dst_ip_anno(inP->dst_ip_anno());
+
 	// destroy request packet.
 	inP->kill();
 
