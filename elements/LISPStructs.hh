@@ -1,8 +1,10 @@
 #ifndef LISPSTRUCTS_H
 #define LISPSTRUCTS_H
 
+extern "C" {
 #include <arpa/inet.h>
 #include <stdint.h>
+};
 
 /*
  * Values for the Type field.
