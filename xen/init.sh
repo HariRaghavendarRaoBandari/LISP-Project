@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 if test $# -lt 2
 then
@@ -25,18 +25,33 @@ fi
 DOMID=-1
 VM_NAME=`cat $XEN_CONF | grep "^name" | cut -d "'" -f 2` 
 
+if `xl list | grep -q "^$VM_NAME"` 
+then
+	read -p "Kill $VM_NAME (y/n) ? " ans
+	if test $ans = "y" -o $ans = "Y"
+	then
+		xl destroy $VM_NAME
+	else
+		echo "Aborting !"
+		exit -1
+	fi
+fi
+
 xl create "$XEN_CONF"
 
-DOMID=`xl list | grep "$VM_NAME" | awk -F' ' '{ print $2 }'`
+DOMID=`xl list | grep "^$VM_NAME" | awk -F' ' '{ print $2 }'`
 
-split -l 10 "$CLICK_CONF" "$CLICK_CONF."
+CLICK_TMP=`mktemp -d`
+split -l 10 "$CLICK_CONF" "$CLICK_TMP/`basename $CLICK_CONF`".
 
 i=0
-for f in `ls "$CLICK_CONF".*`
+for f in `ls "$CLICK_TMP/$CLICK_CONF".*`
 do
 	xenstore-write "/local/domain/$DOMID/clickos/0/config/$i" "`cat $f`"
 	i=$((i+1))
 
 done
+
+rm -R $CLICK_TMP
 
 xenstore-write "/local/domain/$DOMID/clickos/0/status" "Running"
