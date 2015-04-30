@@ -14,6 +14,11 @@ host="localhost"
 # Port number of the control socket
 port=1111
 # The short element's name (e.g. _not_ flatten by click)
+#
+# Note:
+#   In production you want to modify the LISPGenMapRegister element and it's
+#   eid_vector handler.
+#
 short_name="LISPPrintDB"
 # The handler name of the element
 handler_name="MAP"

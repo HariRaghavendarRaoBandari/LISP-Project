@@ -37,31 +37,31 @@ Packet* LISPExtractEIDAndUpdateDB::simple_action(Packet *inP)
 	LISPMapRegister *regis = (LISPMapRegister*) inP->data();
 	LISPMapReply *reply = NULL;
 
+	uint32_t eid, rloc;
+
 	if (regis->Type == LISP_H_TYPE_2 && _is_reply) {
 		reply = (LISPMapReply *) inP->data();
-		uint32_t eid = reply->rec.EID_Prefix;
-		uint32_t rloc = reply->loc.Locator;
-
-		IPAddress rloc_ip(rloc);
-		IPAddress eid_ip(eid);
-
-		click_chatter("[*] Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
-		setEIDToRLOC(eid, rloc);
+		eid = reply->rec.EID_Prefix;
+		rloc = reply->loc.Locator;
 
 	} else if (regis->Type == LISP_H_TYPE_3 && !_is_reply) {
-		uint32_t rloc = getRLOCFromEID(regis->rec.EID_Prefix);
+		eid = regis->rec.EID_Prefix;
 
-		IPAddress rloc_ip(regis->loc.Locator);
-		IPAddress eid_ip(regis->rec.EID_Prefix);
-
-		if (rloc != 0) {
+		if (getRLOCFromEID(eid) != 0) {
 			click_chatter("[*] Remove mapping ");
-			eraseEID(regis->rec.EID_Prefix); 
+			eraseEID(eid); 
 		}
 
-		click_chatter("[*] Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
-		setEIDToRLOC(regis->rec.EID_Prefix, regis->loc.Locator);
+		rloc = regis->loc.Locator;
 	}
+
+	// For the pretty print only
+	IPAddress rloc_ip(rloc);
+	IPAddress eid_ip(eid);
+	click_chatter("[*] Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
+
+	// Finally add the mapping
+	setEIDToRLOC(eid, rloc);
 
 	inP->kill();
 	return NULL;

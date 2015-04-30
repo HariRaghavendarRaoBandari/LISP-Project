@@ -5,17 +5,27 @@
 #include <clicknet/udp.h>
 
 CLICK_DECLS
-/*
- * LISPEncapsulation(SRC, SPORT)
- * 
- * Ajoute l'entête LISP et UDP/IP externe.
- * Met les bits de l'entête LISP à 0 (Bit de statut, flags, Nonce etc...)
- * Encapsule en UDP/IP vers le port 4341 de l'IP se trouvant dans l'annotation
- * Copie du Time-to-live et Type-of-service de l'innerheader vers l'outerheader
- * Ne conserve pas les checksums.
- * SRC réfère au RLOC du xTR qui réalise l'encapsulation.
- */
 
+/*
+=c
+
+LISPEncapsulation(SRC <ip>, SPORT <int>)
+
+=s LISPEncapsulation
+
+Add the outer LISP and UDP/IP headers (in this order).
+Set every bit in the LISP header to 0.
+Encap to port 4341 of the IP in the dst_ip_anno() of the input packet.
+Copy the Time-to-live and Type-of-service IP fields from the inner header to the outer header.
+Checksums have to be computed for the output packet.
+
+=d
+
+SRC is the RLOC for the xTR doing the encapsulation (for the outer IP header).
+SPORT is the source port (for the outer UDP header).
+
+=a SetIPChecksum, SetUDPChecksum
+*/
 class LISPEncapsulation : public Element {
 
 	public:

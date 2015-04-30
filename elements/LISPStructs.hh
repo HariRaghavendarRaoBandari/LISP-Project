@@ -131,18 +131,17 @@ struct LISPMapReplyOuterHeader {
 
 struct LISPHeader {
 #if CLICK_BYTE_ORDER == CLICK_LITTLE_ENDIAN
-	unsigned int flags : 3; // Les 3 bits du champs flags sont réservé à un usage futur
-	unsigned int I : 1; /* Instance ID bit : Quand = 1, les 'Locator-Status-Bits' sont réduit à 8 bits et 24 bits de poid fort
-			     * sont un Instance ID. Si L = 0, alors 8 bits de poid faible sont des 0 et ignorés à la reception */
-	unsigned int V : 1; // Map-Version present bit : Quand = 1 vérif Map-Version et si V = 1 alors N = 0
-	unsigned int E : 1; // Echo-nonce-request bit : Quand = 1 ET N = 1, un ITR demande à l'ETR de retourner le Nonce pour verif chemin. 
-	unsigned int L : 1; // Locator-Status-Bits bit : Quand = 1, les Locator-Status-Bits des seconds 32 bits sont utilisés.
-	unsigned int N : 1; // Nonce-bit : Quand = 1 les 24 bits de poids faible des 32 premiers bits contiennent un Nonce
-
-/*	unsigned int firstLine_1 : 8; // 24 bits de poids faible des 32 premiers bits du header LISP. Peuvent être Nonce ou Map-Version
+	unsigned int flags : 3;
+	unsigned int I : 1;
+	unsigned int V : 1;
+	unsigned int E : 1;
+	unsigned int L : 1;
+	unsigned int N : 1;
+/* The following isn't used because we set all the above flags to 0.
+	unsigned int firstLine_1 : 8;
 	unsigned int firstLine_2 : 8;
 	unsigned int firstLine_3 : 8;
-	unsigned int secondLine : 32; // 32 seconds bits du header LISP. Peuvent être Instance ID ou Locator-Status-Bits
+	unsigned int secondLine : 32;
 	*/
 #else
 #error "Only little endian is supported"
@@ -196,7 +195,7 @@ struct LISPMapRegister {
 	uint32_t nonce2;
 	unsigned int Key_Id : 16; // 16 bits but we use a mask here
 	unsigned int Authentication_Data_Length : 16; // number of bytes for Authentication_Data field -- 16 bits but we use a mask here
-	//unsigned int Authentication_Data : 32;  // uncomment and modify if needed
+	//unsigned int Authentication_Data : 32;  // uncomment if you want to set some authentication data
 	struct LISPRecordLocatorHeader rec;
 	struct LISPLocatorHeader loc;
 #else

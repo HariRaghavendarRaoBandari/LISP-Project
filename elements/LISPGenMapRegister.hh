@@ -18,6 +18,8 @@ Generates the outer common bytes of a MapRegister request.
 When first started, provided EIDs are set as an annotation (at offset
 LISPStructs USER_ANNO_EID) in the outgoing packet. Then, when a new EID is
 added using the handler, we repeat the packet emission for this particular EID.
+The handler's name is "eid_vector", only one EID at the time must be added in
+this.
 
 =d
 
