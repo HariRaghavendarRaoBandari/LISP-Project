@@ -1,4 +1,4 @@
-kernel		= '../click/minios/build/clickos_x86_64'
+kernel		= '/home/user/click/minios/build/clickos_x86_64'
 vcpus		= '1'
 cpus		= '2'
 memory		= '12'
