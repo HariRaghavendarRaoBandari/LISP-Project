@@ -61,8 +61,6 @@ Packet* LISPGenMapReply::simple_action(Packet* inP) {
 	LISPMapReply *reply = (LISPMapReply*) outP->data();
 	LISPMapRequest *request = (LISPMapRequest*) inP->data();
 
-	click_chatter("EID_Prefix = %X\n", request->EID_prefix);
-
 	reply->rec.EID_Prefix = request->EID_prefix;
 	// TODO call prefix-check
 

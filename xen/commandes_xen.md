@@ -20,18 +20,7 @@ RLOC: 10.0.0.14
 
 # démarrer la machine virtuelle xtr
 
-	# xl create xtr_client.xen
-	ou
-	# xl create xtr_server.xen
-
-Il es possible d'optenir une console sur la machine virtuelle en tapant:
-
+	# ./init.sh xtr.xen xtr.click
 	# xl console xtr
-
-Charger la configuration:
-
-	# ./init.sh xtr_client.click
-	ou
-	# ./init.sh xtr_server.click
 
 Le xTR est pr^et!

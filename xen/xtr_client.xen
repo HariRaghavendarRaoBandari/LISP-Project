@@ -1,5 +1,5 @@
 vif		= ['mac=00:15:17:15:5d:74,bridge=xenbr0,ip=10.0.0.13', 'mac=00:15:17:15:5d:75,bridge=xenbr1,ip=192.168.0.10']
-name		= 'xtr_client'
+name		= 'xtr'
 
 #kernel		= './build/clickos_x86_64.gz'
 kernel		= '/home/poky/click/minios/build/clickos_x86_64'
