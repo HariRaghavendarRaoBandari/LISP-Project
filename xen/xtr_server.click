@@ -51,17 +51,13 @@ c[0] -> ITR :: {
 
 	input
 	-> CheckIPHeader(14)
-	-> IPPrint
 	-> IPClassifier(dst udp port 4341,)
-	-> Print("ICI!")
 	-> Strip(14)
 	-> LISPDecapsulation()
 	-> SetUDPChecksum
 	-> SetIPChecksum
 	-> EtherEncap(0x0800, 1:1:1:1:1:1, 2:2:2:2:2:2)
-	-> Print("HERE!")
 	-> output
-
 
 } -> q1;
 
