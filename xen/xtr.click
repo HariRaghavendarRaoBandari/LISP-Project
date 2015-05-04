@@ -1,9 +1,9 @@
 define($MSMRIP 10.0.0.2);		// MSMR IP
 define($RLOCIP 10.0.0.13);		// Our external IP (RLOC)
 define($RLOCMAC 00:15:17:15:5d:74);	// Our external MAC
-define($ITR 192.168.0.10);		// Our internal IP
+define($ITRIP 192.168.0.10);		// Our internal IP
 define($ITRMAC 00:15:17:15:5d:75);	// Our internal MAC
-define($REGISTEREID 192.168.0.11);	// The default EID to register
+define($REGISTEREID 192.168.0.19);	// The default EID to register
 
 /*
 
@@ -66,6 +66,7 @@ cl1 -> ETR :: {
 	} -> output;
 
 	input
+		-> Strip(14)
 		-> LISPEncapsulation(SRC $RLOCIP, SPORT 1234)
 		-> resolv :: LISPResolv
 		-> output;
@@ -85,7 +86,7 @@ ETR, EIDRegistration -> outETR :: Queue
 		-> q0
 		-> ToDevice(DEVID 0);
 
-FromDevice(DEVID 0) -> cl0 ->CheckIPHeader2(14) -> ipc :: IPClassifier(src udp port 4342, src udp port 4341,) -> ReplyHandler :: {
+FromDevice(DEVID 0) -> cl0 ->CheckIPHeader2(14) -> ipc :: IPClassifier(src udp port 4342, dst udp port 4341,) -> ReplyHandler :: {
 	input
 		-> Strip(42)
 		-> Queue
@@ -95,8 +96,6 @@ FromDevice(DEVID 0) -> cl0 ->CheckIPHeader2(14) -> ipc :: IPClassifier(src udp p
 
 ipc[1] -> ITR :: {
 	input
-		-> CheckIPHeader(14)
-		-> IPClassifier(dst udp port 4341,)
 		-> Strip(14)
 		-> LISPDecapsulation
 		-> output
