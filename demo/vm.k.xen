@@ -1,0 +1,49 @@
+#
+# Configuration file for the Xen instance tutorial-pv-guest, created
+# by xen-tools 4.3.1 on Mon May  4 14:52:14 2015.
+#
+
+#
+#  Kernel + memory size
+#
+
+
+bootloader = '/usr/lib/xen-4.1/bin/pygrub'
+
+vcpus       = '2'
+memory      = '512'
+
+#
+#  Disk device(s).
+#
+root        = '/dev/xvda2 ro'
+disk        = [
+                  'file:/home/user/vm/vm0/domains/tutorial-pv-guest/disk.img,xvda2,w',
+                  'file:/home/user/vm/vm0/domains/tutorial-pv-guest/swap.img,xvda1,w',
+              ]
+
+
+#
+#  Physical volumes
+#
+
+
+#
+#  Hostname
+#
+name        = 'vm0'
+
+#
+#  Networking
+#
+vif         = [ 'ip=192.168.1.50,mac=00:16:3E:8B:54:20,bridge=xenbr1']
+
+#
+#  Behaviour
+#
+on_poweroff = 'destroy'
+on_reboot   = 'restart'
+on_crash    = 'restart'
+
+
+
