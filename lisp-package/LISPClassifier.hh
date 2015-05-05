@@ -12,6 +12,23 @@
 
 CLICK_DECLS
 
+/**
+
+=c
+
+LISPClassifier()
+
+=s LISPClassifier
+
+Classifies lisp (control plan) packet by contents.
+
+=d
+
+output 0 -> LISP Map Register.
+output 1 -> LISP Map Request.
+output 2 -> Invalid LISP type.
+
+**/
 class LISPClassifier: public Element {
 public:
 	LISPClassifier() CLICK_COLD;
