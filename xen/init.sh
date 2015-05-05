@@ -41,6 +41,11 @@ xl create "$XEN_CONF"
 
 DOMID=`xl list | grep "^$VM_NAME" | awk -F' ' '{ print $2 }'`
 
+if [ -z $DOMID ] ; then
+	echo "Failed to boot $VM_NAME"
+	exit 1
+fi
+
 CLICK_TMP=`mktemp -d`
 split -l 10 "$CLICK_CONF" "$CLICK_TMP/`basename $CLICK_CONF`".
 
