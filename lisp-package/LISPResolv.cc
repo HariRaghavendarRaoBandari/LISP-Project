@@ -64,7 +64,7 @@ Packet *LISPResolv::simple_action(Packet *p) {
 	IPAddress a = IPAddress(getRLOCFromEID(eid));
 
 	if (a.empty()) {
-		click_chatter("Resolv failed -> output 1 (if connected)\n");
+		//click_chatter("Resolv failed -> output 1 (if connected)\n");
 		p->set_dst_ip_anno(eid);
 		uint8_t failed_resolv = p->anno_u8(RESOLV_COUNTER_OFFSET);
 		p->set_anno_u8(RESOLV_COUNTER_OFFSET, ++failed_resolv);

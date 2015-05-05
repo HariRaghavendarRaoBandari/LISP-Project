@@ -29,8 +29,8 @@ Packet* LISPGenMapRequest::simple_action(Packet *inP) {
 	LISPMapRequest *mr = (LISPMapRequest *) p->data();
 
 	// DEBUG
-	click_chatter("\ndst ip anno: %s\n", p->dst_ip_anno().s().c_str());
-	click_chatter("\nITR ip: %s\n", _ip.s().c_str());
+	//click_chatter("\ndst ip anno: %s\n", p->dst_ip_anno().s().c_str());
+	//click_chatter("\nITR ip: %s\n", _ip.s().c_str());
 
 	mr->Type = LISP_H_TYPE_1;
 	mr->A = 0;

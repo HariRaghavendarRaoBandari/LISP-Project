@@ -53,7 +53,7 @@ Packet* LISPGenMapRegister::pull(int) {
 		WritablePacket *p = Packet::make(headroom, &data, sizeof(LISPMapRegister), 0);
 
 		if (p == NULL) {
-			click_chatter("[-] Packet creation failed!");
+			click_chatter("Packet creation failed!");
 			return NULL;
 		}
 

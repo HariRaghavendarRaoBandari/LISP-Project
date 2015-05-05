@@ -52,7 +52,8 @@ void LISPClassifier::push(int, Packet* p) {
 	else if (check_register(buf, len))
 		outport = LISP_CL_REGISTER;
 
-	click_chatter("Function %s, outport: %d", __PRETTY_FUNCTION__, outport);
+	// DEBUG
+	//click_chatter("Function %s, outport: %d", __PRETTY_FUNCTION__, outport);
 	output(outport).push(p);
 }
 

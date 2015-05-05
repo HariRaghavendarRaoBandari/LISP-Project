@@ -16,10 +16,9 @@ Packet* LISPDecapsulation::simple_action(Packet *p_in)
 	int tos = outer_ip->ip_tos;
 	int ttl = outer_ip->ip_ttl;
 
-	click_chatter("Packet Size: %d",p_in->length());
+	//click_chatter("Packet Size: %d", p_in->length());
 
 	p_in->pull(sizeof(click_ip) + sizeof(click_udp));
-
 
 	struct LISPHeader *lisp = (struct LISPHeader *) p_in->data();
 
@@ -29,7 +28,7 @@ Packet* LISPDecapsulation::simple_action(Packet *p_in)
 	assert(lisp->V == 0);
 	assert(lisp->I == 0);
 	assert(lisp->flags == 0);
-	
+
 	p_in->pull(sizeof(LISPHeader));
 	click_ip * inner_ip = (click_ip *) p_in->data();
 

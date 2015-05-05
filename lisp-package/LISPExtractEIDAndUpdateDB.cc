@@ -38,6 +38,7 @@ Packet* LISPExtractEIDAndUpdateDB::simple_action(Packet *inP)
 	LISPMapReply *reply = NULL;
 
 	uint32_t eid, rloc;
+	eid = rloc = 0; // avoid compiler (g++) warnings
 
 	if (regis->Type == LISP_H_TYPE_2 && _is_reply) {
 		reply = (LISPMapReply *) inP->data();
@@ -48,7 +49,7 @@ Packet* LISPExtractEIDAndUpdateDB::simple_action(Packet *inP)
 		eid = regis->rec.EID_Prefix;
 
 		if (getRLOCFromEID(eid) != 0) {
-			click_chatter("[*] Remove mapping ");
+			click_chatter("Remove mapping.");
 			eraseEID(eid); 
 		}
 
@@ -59,13 +60,13 @@ Packet* LISPExtractEIDAndUpdateDB::simple_action(Packet *inP)
 		// For the pretty print only
 		IPAddress rloc_ip(rloc);
 		IPAddress eid_ip(eid);
-		click_chatter("[*] Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
+		click_chatter("Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
 
 		// Finally add the mapping
 		setEIDToRLOC(eid, rloc);
 
 	} else
-		click_chatter("[-] eid or rloc is 0.0.0.0, we can't add that");
+		click_chatter("EID or RLOC is 0.0.0.0, we can't add that.");
 
 	inP->kill();
 	return NULL;
