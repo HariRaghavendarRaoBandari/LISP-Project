@@ -55,13 +55,17 @@ Packet* LISPExtractEIDAndUpdateDB::simple_action(Packet *inP)
 		rloc = regis->loc.Locator;
 	}
 
-	// For the pretty print only
-	IPAddress rloc_ip(rloc);
-	IPAddress eid_ip(eid);
-	click_chatter("[*] Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
+	if (rloc != 0 && eid != 0) {
+		// For the pretty print only
+		IPAddress rloc_ip(rloc);
+		IPAddress eid_ip(eid);
+		click_chatter("[*] Add mapping EID -> RLOC: %s -> %s", eid_ip.s().c_str(), rloc_ip.s().c_str());
 
-	// Finally add the mapping
-	setEIDToRLOC(eid, rloc);
+		// Finally add the mapping
+		setEIDToRLOC(eid, rloc);
+
+	} else
+		click_chatter("[-] eid or rloc is 0.0.0.0, we can't add that");
 
 	inP->kill();
 	return NULL;
