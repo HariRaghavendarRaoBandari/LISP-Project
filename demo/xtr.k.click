@@ -67,10 +67,13 @@ cl1 -> ETR :: {
 
 	input
 		-> Strip(14)
+		-> MarkIPHeader
+		-> ipc2 :: IPClassifier(src host $REGISTEREID, -)
 		-> LISPEncapsulation(SRC $RLOCIP, SPORT 1234)
 		-> resolv :: LISPResolv
 		-> output;
 
+	ipc2[1] -> IPPrint -> Discard;
 	resolv[1] -> tee;
 	tee[0] -> failedResolvQueue :: Queue -> DelayUnqueue(DELAY 2) -> resolv;
 };
