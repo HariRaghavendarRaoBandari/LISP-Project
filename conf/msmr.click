@@ -8,12 +8,13 @@ MSMR :: {
 	-> cl :: Classifier(12/0800,		// IP packets
 			12/0806 20/0002,	// ARP Replies
 			12/0806 20/0001	// ARP Queries
-			)			// tout le reste
+			)			// other
 	-> CheckIPHeader2(14)
 	-> IPClassifier(udp port 4342,)
 	-> GetIPAddress(ANNO 0, IP src)
 	-> Strip(42)
 	-> c :: LISPClassifier[1]
+	-> LISPPrintDB(RLOC 10.0.0.3) // pretty print the DB
 	-> LISPGenMapReply
 	-> UDPIPEncap($IFACENAME, 4342, DST_ANNO, 1234)
 	-> arpq :: ARPQuerier($IFACENAME) // output 0 : IP packets, output 1 : ARP Requests
