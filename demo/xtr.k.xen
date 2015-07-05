@@ -1,0 +1,7 @@
+kernel		= '/home/user/click/minios/build/clickos_x86_64'
+vcpus		= '1'
+cpus		= '2'
+memory		= '12'
+vif		= ['ip=10.0.0.14,mac=00:15:17:15:5d:76,bridge=xenbr0', 'ip=192.168.1.10,mac=00:15:17:15:5d:77,bridge=xenbr1' ]
+name		= 'xtr'
+on_crash	= 'preserve'

@@ -1,0 +1,14 @@
+*~
+*.o
+*.d
+*.uo
+*.mk
+lisp-package/lisp-uelem.conf
+lisp-package/configure elements/Makefile
+lisp-package/autom4te.cache/
+lisp-package/config.status
+lisp-package/config.log
+lisp-package/elementmap-lisp.xml
+lisp-package/configure
+lisp-package/Makefile
+lisp-package/lisp-umain.cc
