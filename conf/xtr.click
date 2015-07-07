@@ -1,3 +1,5 @@
+require(lisp);
+
 define($MSMRIP 10.0.0.2);		// MSMR IP
 define($RLOCIP 10.0.0.13);		// Our external IP (RLOC)
 define($RLOCMAC 00:15:17:15:5d:74);	// Our external MAC
