@@ -1,5 +1,5 @@
 Click __doit__ être installé sur le système (mode userlevel activé)!
-Voir le ficher commandes_xen.md pour l'utilisation de Xen/ClickOS.
+Voir le ficher xen/README pour l'utilisation de Xen/ClickOS.
 
 Pour utiliser le package lisp il est nécessaire d'exécuter dans lisp-package:
 
