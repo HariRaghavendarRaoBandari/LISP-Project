@@ -20,7 +20,7 @@ If a file is in plain french without any english equivalent, we are working on t
 
 ##Usage
 Click __must__ be installed in userlevel mode.
-See commands_xen.md for Xen/ClickOS usage.
+See xen/README for Xen/ClickOS usage.
 
 To use the lisp package you have to:
 
