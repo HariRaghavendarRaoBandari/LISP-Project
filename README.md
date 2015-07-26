@@ -24,12 +24,12 @@ See xen/README for Xen/ClickOS usage.
 
 To use the lisp package you have to:
 
-1. Compile it:
+Compile it:
 ```
 $ autoreconf
 # make install
 ```
-2. Add the following line to your click configuration files:
+Add the following line to your click configuration files:
 ```
 require(lisp);
 ```
